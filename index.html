@@ -16,11 +16,15 @@
 .block-palette{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.block-palette button{flex:1;min-width:77px;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:6px;padding:9px 7px;background:#fff;color:var(--muted);font-size:11px}.block-palette button[aria-pressed=true]{border-color:#2473d5;background:#edf5ff;color:#185bac;box-shadow:0 0 0 1px #2473d5}.block-palette i{width:13px;height:13px;display:inline-block;border:1px solid #8295a3;border-radius:2px}.block-palette .wall-swatch{background:#293d4c}.block-palette .hazard-swatch{background:repeating-linear-gradient(135deg,#edb65b,#edb65b 3px,#fff1cb 3px,#fff1cb 6px);border-color:#bc893b}.block-palette .start-swatch{border:2px solid #2473d5;border-radius:50%}.block-palette .target-swatch{border:3px double #2473d5;border-radius:50%}.tile.hazard{background:repeating-linear-gradient(135deg,#fbe5b8,#fbe5b8 10px,#f5d793 10px,#f5d793 20px);color:#80500d}.diagnostics textarea{height:180px;margin:10px 0}.diagnostics{border:1px solid var(--line);border-radius:8px;padding:10px 14px;background:white}
 .studio-bar{max-width:1140px;margin:20px auto 0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 17px;background:#fff;border:1px solid var(--line);border-radius:9px}.studio-bar>div{display:flex;align-items:center;gap:14px}.custom-note{max-width:1140px;margin:10px auto 0;padding:12px 16px;border:1px solid #dca55d;border-radius:6px;background:#fff3df;color:#72501c;font-size:12px;line-height:1.6}
 #developer-dialog{width:calc(100vw - 40px);max-width:1400px;height:94vh;padding:22px;overflow:auto}#developer-dialog .drawer-head h2{margin:4px 0 10px}.developer-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.developer-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;min-height:420px}.developer-code,.developer-result{min-width:0}.developer-code .segmented{margin-bottom:8px}#developer-source{height:43vh;min-height:260px;font:11px/1.65 var(--mono);tab-size:2;white-space:pre;resize:vertical}.developer-source-footer{display:flex;justify-content:space-between;align-items:center;font:10px var(--mono);color:var(--muted)}#dev-feedback{margin:7px 0;white-space:pre-wrap;font:11px/1.5 var(--mono);max-height:90px;overflow:auto;color:#596d7c}#dev-feedback.error{color:#b33939}.developer-preview-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:12px}#developer-preview{width:100%;height:43vh;min-height:260px;border:1px solid var(--line);border-radius:7px;background:#f6f8fa}.developer-apply{display:flex;justify-content:space-between;align-items:center;gap:18px;border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.developer-apply p{font-size:11px;color:var(--muted);line-height:1.6;max-width:700px}.developer-apply .btn{background:var(--lime);white-space:nowrap}.developer-toolbar label:has(input:disabled){opacity:.45;pointer-events:none}@media(max-width:1200px){.studio-bar,.custom-note{margin-left:30px;margin-right:30px}}@media(max-width:700px){.studio-bar{margin:15px 20px 0;align-items:flex-start}.studio-bar>div{flex-wrap:wrap;gap:8px}.developer-layout{grid-template-columns:1fr}.developer-apply{align-items:flex-start;flex-direction:column}.custom-note{margin-left:20px;margin-right:20px}#developer-dialog{width:calc(100vw - 16px);padding:14px}}
+/* Welcome stays out of the pointer path so the board and controls work immediately. */
+#welcome-confetti{position:fixed;inset:0;width:100vw;height:100vh;z-index:40;pointer-events:none;opacity:.72}.welcome-celebration{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:41;display:flex;align-items:center;gap:12px;width:min(320px,calc(100vw - 32px));padding:14px 16px;background:#ffffffed;border:1px solid #cddde8;border-radius:14px;box-shadow:0 12px 35px #102b4050;backdrop-filter:blur(8px);pointer-events:none}.welcome-celebration strong,.welcome-celebration span{display:block}.welcome-celebration strong{font-size:14px;color:#1f3b4f}.welcome-celebration div span{font-size:11px;line-height:1.45;color:#557181;margin-top:3px}.welcome-spark{display:grid!important;place-items:center;flex:none;width:31px;height:31px;border-radius:9px;background:#e6f5d5;color:#4f8b31;font-size:21px}@media(max-width:900px){.welcome-celebration{top:auto;bottom:16px;padding:11px 13px;width:min(290px,calc(100vw - 24px))}}@media(prefers-reduced-motion:reduce){#welcome-confetti{opacity:.55}}
 
 </style></head>
 <body>
 <header><div class="header"><div class="brand">root<b>.</b><small>FLEET CONTROL</small></div><div class="connection-count"><i class="dot" id="fleet-dot"></i><span id="connection-count">0 / 2 CONNECTED</span></div></div></header>
 <section class="studio-bar" aria-label="Developer tools"><div><strong>Root Fleet is ready</strong><span class="badge">OPEN ACCESS</span></div><button id="open-developer" class="btn small">Developer studio</button></section>
+<canvas id="welcome-confetti" aria-hidden="true"></canvas>
+<div id="welcome-celebration" class="welcome-celebration" role="status" aria-live="polite"><span class="welcome-spark" aria-hidden="true">✦</span><div><strong>Welcome to Root Fleet!</strong><span>Tap anywhere to clear the confetti.</span></div></div>
 <p class="custom-note" id="custom-build-note" hidden></p>
 <dialog id="developer-dialog" aria-labelledby="developer-heading"><div class="drawer-head"><div><span class="eyebrow">LOCAL WORKSPACE</span><h2 id="developer-heading">Developer studio</h2></div><button class="btn small" id="close-developer">Close studio</button></div><p class="micro">Edit the full application or add CSS/JavaScript overrides. Preview is isolated from Bluetooth and parent storage. Modified builds can change safety behavior.</p>
 <div class="developer-toolbar"><button class="btn small" id="dev-save">Save draft</button><label class="btn small file-label">Import HTML<input type="file" id="dev-import" accept=".html,.htm,text/html" hidden></label><button class="btn small" id="dev-restore-original">Restore original</button><button class="btn small" id="dev-restore-working">Restore working version</button><button class="btn small" id="dev-export">Export source</button></div>
@@ -1594,5 +1598,82 @@ $('dev-apply').addEventListener('click',async()=>{
 });
 appUiReady=true;renderControls();
 if(window.__ROOT_CUSTOM_BUILD__===true){$('custom-build-note').hidden=false;$('custom-build-note').textContent='CUSTOMER-MODIFIED BUILD · Return to the original app tab for recovery. Safety behavior may have changed.';}
+
+/* A light, nonblocking welcome celebration. The canvas and message ignore
+ * pointer input; the first tap reaches its normal control and clears both. */
+(() => {
+  const canvas = document.getElementById('welcome-confetti');
+  const card = document.getElementById('welcome-celebration');
+  if (!canvas || !card) return;
+  const context = canvas.getContext('2d');
+  let frame = 0, previous = 0, width = 0, height = 0, active = true;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const colors = ['#86bf67', '#6aaee0', '#cf9ddd', '#e8b85f', '#70c5bd'];
+  const flakes = Array.from({length: 42}, (_, i) => {
+    const lane = i % 10;
+    return {
+      x: lane < 4 ? Math.random() * .22 : lane < 8 ? .78 + Math.random() * .22 : .25 + Math.random() * .5,
+      y: Math.random(),
+      size: 3 + Math.random() * 4,
+      speed: .25 + Math.random() * .55,
+      drift: (Math.random() - .5) * .25,
+      angle: Math.random() * Math.PI,
+      spin: (Math.random() - .5) * .035,
+      color: colors[i % colors.length]
+    };
+  });
+  function resize() {
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.ceil(width * pixelRatio);
+    canvas.height = Math.ceil(height * pixelRatio);
+    context?.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    if (reduceMotion) draw(0);
+  }
+  function draw(delta) {
+    if (!context) return;
+    context.clearRect(0, 0, width, height);
+    context.globalAlpha = .72;
+    for (const flake of flakes) {
+      if (delta) {
+        flake.x += flake.drift * delta / Math.max(width, 1);
+        flake.y += flake.speed * delta / Math.max(height, 1);
+        flake.angle += flake.spin * delta;
+        if (flake.y > 1.03) flake.y = -.03;
+        if (flake.x < -.03) flake.x = 1.03;
+        if (flake.x > 1.03) flake.x = -.03;
+      }
+      context.save();
+      context.translate(flake.x * width, flake.y * height);
+      context.rotate(flake.angle);
+      context.fillStyle = flake.color;
+      context.fillRect(-flake.size / 2, -flake.size, flake.size, flake.size * 2);
+      context.restore();
+    }
+    context.globalAlpha = 1;
+  }
+  function animate(timestamp) {
+    if (!active) return;
+    draw(Math.min(2, (timestamp - previous) / 16.7 || 1));
+    previous = timestamp;
+    frame = requestAnimationFrame(animate);
+  }
+  function dismiss() {
+    if (!active) return;
+    active = false;
+    cancelAnimationFrame(frame);
+    window.removeEventListener('resize', resize);
+    window.removeEventListener('keydown', onKey);
+    canvas.remove();
+    card.remove();
+  }
+  function onKey(event) { if (event.key === 'Escape') dismiss(); }
+  window.addEventListener('resize', resize);
+  window.addEventListener('keydown', onKey);
+  document.addEventListener('pointerdown', dismiss, {capture: true, once: true});
+  resize();
+  if (!reduceMotion) frame = requestAnimationFrame(animate);
+})();
 </script>
 </body></html>
