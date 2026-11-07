@@ -1,0 +1,1597 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#162332"><title>Root Fleet · Custom maps, one coordinated fleet</title>
+<style>
+:root{--ink:#172b3c;--muted:#637784;--line:#dce3e8;--paper:#f6f8fa;--a:#2473d5;--b:#8d55c3;--lime:#d9f6a6;--red:#bd4141;--mono:ui-monospace,SFMono-Regular,Consolas,monospace;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,select,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #57b5ec;outline-offset:3px}header{background:#162332;color:#fff}.header{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:21px 30px}.brand{font-size:28px;font-weight:800;letter-spacing:-1px}.brand b{color:var(--lime)}.brand small{font-size:11px;letter-spacing:2px;font-weight:500;color:#c0ccd5;margin-left:20px;border-left:1px solid #506071;padding-left:20px}.connection-count{font:12px var(--mono);color:#c9d4df;display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;background:#a0acb7;border-radius:50%;display:inline-block}.dot.ready{background:#bef087}main{max-width:1200px;margin:auto;padding:30px}.intro{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.intro h1{font-size:29px;letter-spacing:-.9px;margin:0 0 7px}.intro p{margin:0;color:var(--muted);font-size:14px}.board-spec{font:11px/1.8 var(--mono);color:var(--muted);text-align:right;letter-spacing:.4px}.workspace{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(340px,.9fr);gap:22px}.panel{background:white;border:1px solid var(--line);border-radius:14px;box-shadow:0 3px 12px #15283b04}.board-panel{padding:23px}.eyebrow{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:750;color:var(--muted)}.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.badge{font:10px var(--mono);padding:5px 8px;border:1px solid #dce6e9;border-radius:5px;background:#f6f9fa;color:#526773}.segmented{display:flex;padding:4px;background:#eff3f6;border-radius:8px;gap:3px;margin-bottom:13px}.segmented button{flex:1;font-size:12px;line-height:1.4;border:0;border-radius:5px;padding:9px 5px;background:transparent;color:var(--muted);font-weight:650}.segmented button small{font-size:10px;font-weight:450}.segmented button[aria-pressed=true]{background:white;box-shadow:0 1px 5px #1b33411c;color:var(--a)}.segmented button[data-mode=B][aria-pressed=true]{color:var(--b)}.segmented button[data-mode=draw][aria-pressed=true]{color:var(--ink)}.board-area{position:relative;padding:22px 0 18px 23px;max-width:560px;margin:auto}.north{position:absolute;top:0;left:23px;right:0;text-align:center;font:9px var(--mono);letter-spacing:2px;color:#71848f}.grid{position:relative;aspect-ratio:1;border:1px solid #bdcbd5;border-radius:8px;isolation:isolate;touch-action:none;background:#f6f9fb;overflow:hidden}.tiles{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr)}.tile{position:relative;border:0;border-right:1px solid #d6e0e6;border-bottom:1px solid #d6e0e6;background:transparent;color:#8395a1}.tile:disabled{opacity:1;cursor:default}.tile:nth-child(4n){border-right:0}.tile:nth-child(n+13){border-bottom:0}.tile:hover{background:#e7eef4}.tile:focus-visible{outline-offset:-4px;z-index:5}.tile .coord{position:absolute;top:8px;left:9px;font:9px var(--mono)}.tile.blocked{background:#293d4c;color:#b5c6d2}.tile.robot-blocked{background:repeating-linear-gradient(135deg,#e2e8ed,#e2e8ed 7px,#ebf0f4 7px,#ebf0f4 14px);color:#576c7b}.tile.learned{background:#5b4634;color:#f7cca6}.tile .mark{position:absolute;bottom:7px;left:0;right:0;text-align:center;font:9px var(--mono);letter-spacing:.5px}.grid[data-mode=draw] .tile{cursor:crosshair}.paths{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}.route{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.7}.route.a{stroke:var(--a)}.route.b{stroke:var(--b)}.route.back{stroke-dasharray:2 8;stroke-width:2;opacity:.55}.robot,.target{position:absolute;pointer-events:none;transform:translate(-50%,-50%)}.robot{width:12%;height:12%;z-index:4;color:var(--a);filter:drop-shadow(0 2px 3px #15283b30)}.robot.b{color:var(--b)}.robot-body{width:100%;height:100%;transform:rotate(0deg)}.robot svg{width:100%;height:100%}.robot-letter{position:absolute;top:-8px;left:-7px;border-radius:50%;width:17px;height:17px;color:white;background:var(--a);font:10px/17px var(--mono);text-align:center}.robot.b .robot-letter{background:var(--b)}.robot.yielding:after{content:'YIELD';position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#fff1d5;border:1px solid #e3b863;color:#985d00;border-radius:4px;padding:3px 5px;font:8px var(--mono);margin-top:4px}.target{width:8%;height:8%;z-index:2;color:var(--a);opacity:.8}.target.b{color:var(--b)}.target svg{width:100%;height:100%}.robot-led{stroke:#8a99a6;stroke-width:4;stroke-linecap:round}.blink{animation:blink .25s steps(1,end) infinite}@keyframes blink{50%{opacity:.12}}.y-axis{position:absolute;top:22px;bottom:18px;left:0;display:flex;flex-direction:column;justify-content:space-around;font:11px var(--mono);color:#77909f}.x-axis{position:absolute;bottom:0;left:23px;right:0;display:flex;justify-content:space-around;font:11px var(--mono);color:#77909f}.hint{color:var(--muted);font-size:12px;line-height:1.65;min-height:39px;margin:15px 0 10px}.hint strong{color:var(--ink)}.board-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid #edf1f4;padding-top:13px}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:var(--muted)}.line-key{display:inline-block;width:14px;border-top:2px solid var(--a);vertical-align:middle;margin-right:4px}.line-key.purple{border-color:var(--b)}.line-key.dashed{border-top-style:dotted;border-color:#667e90}.text-button{border:0;background:transparent;font-size:11px;color:var(--muted);padding:6px}.text-button:hover{color:var(--a)}.controls{padding:22px;display:flex;flex-direction:column;gap:16px}.robot-card{border:1px solid var(--line);border-radius:9px;padding:15px;border-left:3px solid var(--a)}.robot-card.b{border-left-color:var(--b)}.card-top{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:10px}.card-title{font-size:14px;font-weight:700}.card-title span{color:var(--a)}.b .card-title span{color:var(--b)}.role{font-size:10px;color:var(--muted);font-weight:500;margin-left:5px}.connection{font:9px var(--mono);color:var(--muted);max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.state-row{display:flex;justify-content:space-between;font-size:12px;margin:6px 0;color:var(--muted)}.state-row strong{font:11px var(--mono);color:var(--ink)}.robot-status{font-size:11px;line-height:1.45;color:var(--muted);min-height:17px;max-height:52px;overflow:auto}.card-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}.btn{display:inline-flex;justify-content:center;align-items:center;gap:6px;min-height:39px;border:1px solid #bacbd7;background:#fff;border-radius:6px;padding:9px 12px;font-size:12px;font-weight:650;color:var(--ink)}.btn:hover:not(:disabled){background:#edf3f7}.btn.small{min-height:30px;font-size:10px;padding:6px 9px}.lamps{display:flex;align-items:center;gap:6px;font:9px var(--mono);color:var(--muted)}.lamp{width:9px;height:9px;border-radius:50%;background:#8a99a6}.traffic{border:1px solid #cee0be;background:#f5faef;border-radius:8px;padding:12px}.traffic.error{background:#fff6e8;border-color:#ebd3ae}.traffic-title{font-size:12px;font-weight:700;margin:0 0 5px}.traffic-copy{font-size:11px;line-height:1.55;color:var(--muted);margin:0}.run-controls{display:grid;grid-template-columns:1fr auto;gap:8px}.go{grid-column:1/-1;background:var(--lime);border:1px solid #b2cf8f;font-size:14px;min-height:46px}.go:hover:not(:disabled){background:#cbed96}.stop{color:#a54545;border-color:#d4b7b7}.status-banner{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;background:#eaf0f4;border-radius:9px;padding:12px 16px;gap:10px}.status-main{font-size:12px;line-height:1.5;color:#466172}.status-banner.error{background:#fff0da}.status-banner.error .status-main{color:#8e590e}.tick{font:10px var(--mono);color:#758a97;white-space:nowrap}.micro{font-size:10px;line-height:1.65;color:var(--muted);margin:0}.test-row{display:flex;gap:8px;justify-content:center}.footer{display:flex;justify-content:space-between;gap:20px;margin-top:19px;font-size:11px;line-height:1.7;color:var(--muted)}.footer p{margin:0;max-width:780px}.color-key{display:flex;gap:12px;flex-wrap:wrap;font:9px var(--mono);padding-top:4px}.color-key i{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px}.footer-actions{display:flex;flex-direction:column;align-items:flex-end;white-space:nowrap}details{margin-top:18px;font-size:11px;line-height:1.8;color:var(--muted)}summary{cursor:pointer;color:var(--ink)}details a{color:var(--a)}.architecture{white-space:pre-wrap;font:10px/1.8 var(--mono)}dialog{border:1px solid var(--line);border-radius:12px;padding:22px;max-width:760px;width:calc(100vw - 30px);color:var(--ink)}dialog::backdrop{background:#10202f65;backdrop-filter:blur(3px)}.drawer-head{display:flex;align-items:center;justify-content:space-between}.drawer-head h2{font-size:20px;margin:0}dialog select{padding:8px;margin:12px 8px 12px 0;border:1px solid var(--line);border-radius:5px;background:white}textarea{width:100%;height:48vh;resize:vertical;background:#162332;color:#d8ecb9;border:0;border-radius:6px;padding:17px;font:11px/1.65 var(--mono)}.drawer-actions{display:flex;gap:8px;margin-top:12px}[hidden]{display:none!important}@media(max-width:820px){main{padding:20px}.workspace{grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:13px}.board-panel{padding:16px}.controls{padding:16px}.segmented button{font-size:10px}.intro h1{font-size:24px}}@media(max-width:680px){.workspace{grid-template-columns:1fr}.intro{align-items:flex-start}.board-spec{display:none}.header{padding:17px 20px}.brand small{font-size:9px;margin-left:12px;padding-left:12px}.intro h1{font-size:25px}.intro p{font-size:12px}.footer{flex-direction:column;gap:6px}.footer-actions{align-items:flex-start}.status-banner{align-items:flex-start}.controls{gap:12px}.board-area{max-width:450px}.hint{min-height:0}.segmented button{font-size:12px}}@media(prefers-reduced-motion:reduce){.blink{animation-duration:1s}.robot,.robot-body{transition:none!important}}
+
+/* Dynamic fleet layout: cards live below the canvas and never crowd the map. */
+.workspace{grid-template-columns:minmax(0,1.45fr) minmax(280px,.8fr)}.controls{gap:20px}.segmented{flex-wrap:wrap;max-height:106px;overflow:auto;align-items:center}.segmented button{flex:0 0 auto;min-width:95px;padding:10px 13px}.segmented button[aria-pressed=true]{color:var(--robot-color,var(--ink))}.segmented button[data-mode=draw]{margin-left:auto}.priority-card{display:flex;gap:13px;align-items:center;background:#f1f6fc;padding:16px;border-radius:9px}.priority-letter{font:700 22px var(--mono);color:#2473d5;background:white;border:1px solid #c4d8f0;border-radius:9px;padding:13px}.priority-card strong{font-size:14px}.priority-card p{font-size:12px;line-height:1.6;margin:5px 0 0;color:var(--muted)}.rail-note{margin-top:auto;padding-top:16px;border-top:1px solid var(--line)}.rail-note p{font-size:12px;line-height:1.65;color:var(--muted);margin:8px 0 0}.signal-dictionary{line-height:2;gap:9px 12px}.fleet-section{margin-top:30px}.fleet-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}.fleet-heading h2{font-size:22px;letter-spacing:-.5px;margin:5px 0 0}.robot-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:14px}.robot-card{background:white;padding:17px;border-left:3px solid var(--robot-color);margin:0!important}.robot-card.bench{background:#fafbfc;border-style:dashed}.card-title span,.robot,.target{color:var(--robot-color)}.robot-letter{background:var(--robot-color);min-width:17px;width:auto;padding:0 4px}.connect-robot{width:100%;min-height:43px;margin-top:14px;background:#f5f8fb}.card-bottom{gap:3px;margin-top:12px}.card-bottom .lamps{margin-left:auto}.card-bottom .text-button{padding:4px;font-size:10px}.connection{display:block;max-width:none;margin-bottom:12px;font-size:10px}.remove-robot{font-size:18px;padding:0 4px}.add-row{display:flex;align-items:center;gap:17px;margin-top:16px}.add-robot{min-width:180px;border-style:dashed;background:transparent;min-height:46px}.add-row p{font-size:12px;color:var(--muted);line-height:1.6}.test-row{flex-wrap:wrap}.waiting-route{stroke-dasharray:6 6;opacity:.3}.robot-status{min-height:32px;margin-top:10px}.tile:disabled{opacity:1;cursor:default}.status-main{overflow-wrap:anywhere}.board-footer{margin-top:8px}
+@media(max-width:780px){.workspace{grid-template-columns:minmax(0,1fr) minmax(260px,.8fr)}}
+@media(max-width:680px){.workspace{grid-template-columns:1fr}.robot-cards{grid-template-columns:1fr}.fleet-heading{gap:12px;flex-wrap:wrap}.add-row{flex-direction:column;align-items:stretch;gap:2px}.add-row p{margin:7px 0}.controls{gap:15px}}
+
+/* Environment editor and calibrated map. All assets stay in this browser. */
+.environment{padding:20px 23px;margin-bottom:22px}.environment-top{display:flex;justify-content:space-between;align-items:center;gap:15px}.environment h2{margin:5px 0 0;font-size:18px}.environment-controls{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-top:17px}.field{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--muted)}.field input,.field select{border:1px solid #bdcbd5;border-radius:5px;background:white;color:var(--ink);padding:9px;width:91px;font:12px var(--mono)}.field.wide input{width:145px}.environment .file-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px;align-items:center}.file-label{cursor:pointer}.environment-hint{font-size:11px;line-height:1.65;color:var(--muted);margin:12px 0 0}.env-divider{border-left:1px solid var(--line);height:38px;margin:0 5px}.file-name{font:11px var(--mono);color:var(--muted);overflow-wrap:anywhere}.grid{--cols:4;--rows:4;aspect-ratio:1;min-height:180px}.tiles{grid-template-columns:repeat(var(--cols),1fr);grid-template-rows:repeat(var(--rows),1fr)}.tile:nth-child(n){border-right:1px solid #a7bac56b;border-bottom:1px solid #a7bac56b}.tile{background:#f6f9fb30}.tile:hover{background:#bcd9f16b}.floor-image{position:absolute;inset:0;width:100%;height:100%;opacity:.6;pointer-events:none;object-fit:fill;z-index:-1}.board-area{max-width:660px}.robot{width:var(--robot-size,12%);height:auto;aspect-ratio:1}.target{width:var(--target-size,8%);height:auto;aspect-ratio:1}.paths{overflow:visible}.route{vector-effect:non-scaling-stroke}.tile .coord{font-size:clamp(6px,1vw,9px)}.tile .mark{font-size:clamp(6px,1vw,9px);overflow:hidden;white-space:nowrap}.grid.dense .mark{display:none}.calibration-stage{position:relative;width:100%;max-height:52vh;overflow:auto;background:#e9eef2;border-radius:8px;margin:14px 0}.calibration-stage img{display:block;width:100%;height:auto;user-select:none}.calibration-stage svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.cal-point{fill:#e65132;stroke:white;stroke-width:2}.cal-line{stroke:#e65132;stroke-width:2;stroke-dasharray:7 4;vector-effect:non-scaling-stroke}.calibration-stage button{position:absolute;inset:0;border:0;background:transparent;cursor:crosshair}.calibration-fields{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}.calibration-fields .field input{width:120px}.calibration-error{color:#a13636;min-height:16px}.emergency-panel{border:1px solid #e48f8f;background:#fff0f0;border-radius:10px;padding:16px;margin-bottom:20px}.emergency-panel strong{color:#a02d2d}.emergency-panel p{font-size:12px;line-height:1.65;color:#824848;margin:8px 0}.emergency-panel .btn{border-color:#bd5555;color:#922626}.status-banner.emergency{background:#ffe1e1;border:1px solid #d67070}.status-banner.emergency .status-main{color:#982f2f}.emergency-test{border-color:#db9e9e;color:#a13d3d}.environment .field input:disabled{opacity:.5}.file-label:has(input:disabled){opacity:.45;pointer-events:none}.board-spec{white-space:pre-line}
+@media(max-width:680px){.environment{padding:16px}.environment-top{align-items:flex-start}.environment-controls{gap:10px}.env-divider{display:none}.field input{width:80px}.environment .file-actions .btn{flex:1}.board-panel{padding:12px}}
+.calibration-stage{width:fit-content;max-width:100%;max-height:none;overflow:hidden;margin:14px auto}.calibration-stage img{width:auto;max-width:100%;max-height:50vh;height:auto}
+.block-palette{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.block-palette button{flex:1;min-width:77px;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:6px;padding:9px 7px;background:#fff;color:var(--muted);font-size:11px}.block-palette button[aria-pressed=true]{border-color:#2473d5;background:#edf5ff;color:#185bac;box-shadow:0 0 0 1px #2473d5}.block-palette i{width:13px;height:13px;display:inline-block;border:1px solid #8295a3;border-radius:2px}.block-palette .wall-swatch{background:#293d4c}.block-palette .hazard-swatch{background:repeating-linear-gradient(135deg,#edb65b,#edb65b 3px,#fff1cb 3px,#fff1cb 6px);border-color:#bc893b}.block-palette .start-swatch{border:2px solid #2473d5;border-radius:50%}.block-palette .target-swatch{border:3px double #2473d5;border-radius:50%}.tile.hazard{background:repeating-linear-gradient(135deg,#fbe5b8,#fbe5b8 10px,#f5d793 10px,#f5d793 20px);color:#80500d}.diagnostics textarea{height:180px;margin:10px 0}.diagnostics{border:1px solid var(--line);border-radius:8px;padding:10px 14px;background:white}
+.studio-bar{max-width:1140px;margin:20px auto 0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 17px;background:#fff;border:1px solid var(--line);border-radius:9px}.studio-bar>div{display:flex;align-items:center;gap:14px}.custom-note{max-width:1140px;margin:10px auto 0;padding:12px 16px;border:1px solid #dca55d;border-radius:6px;background:#fff3df;color:#72501c;font-size:12px;line-height:1.6}
+#developer-dialog{width:calc(100vw - 40px);max-width:1400px;height:94vh;padding:22px;overflow:auto}#developer-dialog .drawer-head h2{margin:4px 0 10px}.developer-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.developer-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;min-height:420px}.developer-code,.developer-result{min-width:0}.developer-code .segmented{margin-bottom:8px}#developer-source{height:43vh;min-height:260px;font:11px/1.65 var(--mono);tab-size:2;white-space:pre;resize:vertical}.developer-source-footer{display:flex;justify-content:space-between;align-items:center;font:10px var(--mono);color:var(--muted)}#dev-feedback{margin:7px 0;white-space:pre-wrap;font:11px/1.5 var(--mono);max-height:90px;overflow:auto;color:#596d7c}#dev-feedback.error{color:#b33939}.developer-preview-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-size:12px}#developer-preview{width:100%;height:43vh;min-height:260px;border:1px solid var(--line);border-radius:7px;background:#f6f8fa}.developer-apply{display:flex;justify-content:space-between;align-items:center;gap:18px;border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.developer-apply p{font-size:11px;color:var(--muted);line-height:1.6;max-width:700px}.developer-apply .btn{background:var(--lime);white-space:nowrap}.developer-toolbar label:has(input:disabled){opacity:.45;pointer-events:none}@media(max-width:1200px){.studio-bar,.custom-note{margin-left:30px;margin-right:30px}}@media(max-width:700px){.studio-bar{margin:15px 20px 0;align-items:flex-start}.studio-bar>div{flex-wrap:wrap;gap:8px}.developer-layout{grid-template-columns:1fr}.developer-apply{align-items:flex-start;flex-direction:column}.custom-note{margin-left:20px;margin-right:20px}#developer-dialog{width:calc(100vw - 16px);padding:14px}}
+
+</style></head>
+<body>
+<header><div class="header"><div class="brand">root<b>.</b><small>FLEET CONTROL</small></div><div class="connection-count"><i class="dot" id="fleet-dot"></i><span id="connection-count">0 / 2 CONNECTED</span></div></div></header>
+<section class="studio-bar" aria-label="Developer tools"><div><strong>Root Fleet is ready</strong><span class="badge">OPEN ACCESS</span></div><button id="open-developer" class="btn small">Developer studio</button></section>
+<p class="custom-note" id="custom-build-note" hidden></p>
+<dialog id="developer-dialog" aria-labelledby="developer-heading"><div class="drawer-head"><div><span class="eyebrow">LOCAL WORKSPACE</span><h2 id="developer-heading">Developer studio</h2></div><button class="btn small" id="close-developer">Close studio</button></div><p class="micro">Edit the full application or add CSS/JavaScript overrides. Preview is isolated from Bluetooth and parent storage. Modified builds can change safety behavior.</p>
+<div class="developer-toolbar"><button class="btn small" id="dev-save">Save draft</button><label class="btn small file-label">Import HTML<input type="file" id="dev-import" accept=".html,.htm,text/html" hidden></label><button class="btn small" id="dev-restore-original">Restore original</button><button class="btn small" id="dev-restore-working">Restore working version</button><button class="btn small" id="dev-export">Export source</button></div>
+<div class="developer-layout"><section class="developer-code"><div class="segmented" id="developer-tabs" role="group" aria-label="Source editor"><button data-editor="html" aria-pressed="true">Full HTML</button><button data-editor="css" aria-pressed="false">CSS override</button><button data-editor="js" aria-pressed="false">JS extension</button></div><textarea id="developer-source" aria-label="Application source editor" spellcheck="false" wrap="off"></textarea><div class="developer-source-footer"><span id="dev-source-info">Loading source…</span><button class="text-button" id="dev-check">Check syntax</button></div><pre id="dev-feedback" role="status">Source is never executed merely by loading or saving it.</pre></section><section class="developer-result"><div class="developer-preview-head"><strong>Isolated preview</strong><button class="btn small" id="dev-preview">Run preview</button></div><iframe id="developer-preview" title="Isolated custom application preview" sandbox="allow-scripts" allow="bluetooth 'none'; camera 'none'; microphone 'none'; geolocation 'none'; usb 'none'; serial 'none'; hid 'none'; clipboard-read 'none'; clipboard-write 'none'"></iframe><p class="micro" id="dev-preview-status">Preview has not been run. It cannot control physical robots.</p><button class="text-button" id="dev-mark-working">Mark preview as working</button></section></div>
+<div class="developer-apply"><p id="dev-apply-status">Open a modified copy only while every robot is disconnected and the fleet is stopped. The supported app stays open for recovery.</p><button class="btn" id="dev-apply">Open modified app</button></div><p id="dev-status" class="micro" role="status"></p></dialog>
+
+<main><div class="intro"><div><h1>Your fleet. One shared world.</h1><p>Map your space. Calibrate your tiles. Let priority lead.</p></div><div class="board-spec" id="board-spec">4 × 4 GRID
+64 × 64 CM / 16 × 16 CM TILES</div></div>
+<section class="panel environment" aria-label="Environment and scale configuration">
+<div class="environment-top"><div><span class="eyebrow">Environment studio</span><h2>Your floor plan, at real scale.</h2></div><button class="text-button" id="root-preset">Root whiteboard preset</button></div>
+<div class="environment-controls">
+<label class="field">Columns<input id="grid-cols" type="number" min="1" max="32" step="1" value="4"></label>
+<label class="field">Rows<input id="grid-rows" type="number" min="1" max="32" step="1" value="4"></label><span class="env-divider"></span>
+<label class="field">Tile width (cm)<input id="tile-width" type="number" min="1" max="200" step="0.1" value="16"></label>
+<label class="field">Tile height (cm)<input id="tile-height" type="number" min="1" max="200" step="0.1" value="16"></label>
+<button class="btn" id="apply-grid">Apply dimensions</button><button class="btn" id="calibrate-image" disabled>Calibrate from image</button>
+</div>
+<div class="file-actions"><label class="btn file-label">Upload floor plan<input id="floor-upload" type="file" accept="image/png,image/jpeg,image/svg+xml,.png,.jpg,.jpeg,.svg" hidden></label><label class="btn file-label">Upload reference image<input id="reference-upload" type="file" accept="image/png,image/jpeg,image/svg+xml,.png,.jpg,.jpeg,.svg" hidden></label><button class="text-button" id="remove-image" disabled>Remove image</button><span class="file-name" id="floor-name">Blank drawing surface</span></div>
+<p class="environment-hint" id="environment-status" role="status">Paint Wall or Hazard blocks; Floor erases them. Images stay local; the grid covers the full image. Dark image pixels are not automatically obstacles.</p>
+<div class="file-actions"><button class="text-button" id="save-map">Save map file</button><label class="text-button file-label">Open map file<input id="map-upload" type="file" accept="application/json,.json" hidden></label><span class="micro">Save the image, dimensions and walls together.</span></div>
+</section>
+<section class="emergency-panel" id="emergency-panel" hidden role="alert"><strong>TOUCH STOP · Emergency pause</strong><p id="emergency-copy">Motion is cancelled. Release all top pads and place every robot at its marked start and heading. Reset clears the latch; GO starts a new run.</p><button class="btn" id="reset-emergency">Reset touch stop — starts restored</button></section>
+<div class="workspace">
+<section class="panel board-panel" aria-label="Fleet whiteboard simulator"><div class="panel-head"><span class="eyebrow">Shared map</span><span class="badge" id="run-mode">LIVE PREVIEW</span></div>
+<div class="segmented" id="setup-modes" role="group" aria-label="Board editing mode"><button data-mode="draw" id="draw-mode" aria-pressed="false">Map tools</button></div>
+<div class="block-palette" id="block-palette" role="group" aria-label="Block placement tools"><button data-tool="wall" aria-pressed="false"><i class="wall-swatch" aria-hidden="true"></i>Wall</button><button data-tool="floor" aria-pressed="false"><i aria-hidden="true"></i>Floor</button><button data-tool="hazard" aria-pressed="false"><i class="hazard-swatch" aria-hidden="true"></i>Hazard</button><button data-tool="start" aria-pressed="false"><i class="start-swatch" aria-hidden="true"></i>Robot Start</button><button data-tool="target" aria-pressed="false"><i class="target-swatch" aria-hidden="true"></i>Robot Target</button></div>
+<div class="board-area"><div class="north">↑ NORTH / +Y</div><div class="y-axis" id="y-axis" aria-hidden="true"><span>3</span><span>2</span><span>1</span><span>0</span></div><div class="grid" id="board" data-mode="A"><img class="floor-image" id="floor-image" alt="Uploaded floor plan" hidden><div class="tiles" id="tiles" role="group" aria-label="Interactive floor grid"></div><svg viewBox="0 0 400 400" preserveAspectRatio="none" class="paths" id="paths" aria-hidden="true"></svg></div><div class="x-axis" id="x-axis" aria-hidden="true"><span>0</span><span>1</span><span>2</span><span>3</span></div></div>
+<p class="hint" id="board-help"></p><div class="board-footer"><div class="legend"><span><i class="line-key"></i>Outbound</span><span><i class="line-key dashed"></i>Return</span></div><div><button class="text-button" id="clear-obstacles">Clear obstacles</button><button class="text-button" id="reset">Reset board</button></div></div></section>
+<aside class="panel controls" aria-label="Fleet execution controls"><span class="eyebrow">Traffic control</span>
+<div class="priority-card"><span class="priority-letter">A</span><div><strong>Priority goes first.</strong><p>Other robots automatically wait with orange lights until their route clears.</p></div></div>
+<div class="traffic" id="traffic"><p class="traffic-title" id="plan-title">Configure a mission</p><p class="traffic-copy" id="plan-copy"></p></div>
+<div class="run-controls"><button class="btn" id="simulate" disabled>Simulate Fleet</button><button class="btn stop" id="stop" disabled>Stop all</button><button class="btn go" id="go" disabled>GO - Run Fleet</button></div>
+<p class="micro">Simulate without hardware. GO runs the placed fleet; connect each placed robot first.</p>
+<div class="color-key signal-dictionary"><span><i style="background:#f00"></i>DRIVE / TURN</span><span><i style="background:#ffa500"></i>AUTO-WAIT</span><span><i style="background:#e5c800"></i>BLOCKED</span><span><i style="background:#e94444"></i>TOUCH STOP</span><span><i style="background:#00a647"></i>COMPLETE</span></div>
+<p class="micro" id="light-note">Directional signals in simulation. Stock Root turns blink the shared top-light cross.</p>
+<div class="test-row" id="test-row" hidden></div><button class="btn small" id="recheck" hidden>Recheck waiting routes</button><button class="text-button" id="reposition" hidden>All deployed robots are repositioned at their starts</button><button class="text-button" id="export" disabled>Open Python fallback</button>
+<div class="rail-note"><span class="eyebrow">A shared world</span><p>Adjacent tiles are allowed. Parked robots become map obstacles, and A plans around them. A never enters Auto-Wait.</p></div></aside>
+<div class="status-banner" id="status-banner"><div class="status-main" id="live-status" role="status" aria-live="polite">Ready to plan your fleet.</div><span class="tick" id="tick">STANDBY</span></div></div>
+<section class="fleet-section" aria-label="Virtual fleet management"><div class="fleet-heading"><div><span class="eyebrow">Virtual fleet</span><h2>Build your crew.</h2></div><span class="badge" id="fleet-count">1 virtual</span></div><div class="robot-cards" id="robot-cards"></div><div class="add-row"><button class="btn add-robot" id="add-robot">+ Add Robot</button><p>No connection needed. New robots wait on the virtual bench until you place them.</p></div></section>
+<div class="footer"><div><p>Use your calibrated dimensions. Place real robots at their marked centers and headings. Bench robots must be off the physical board.</p><p>One robot per tile. Routes use tile occupancy; robot body dimensions are not modeled.</p></div><div class="footer-actions"><button class="text-button" id="example">Load crossing demo ↗</button><span>Chrome / Edge · HTTPS or localhost</span></div></div>
+<details class="diagnostics" id="movement-diagnostics" hidden><summary>Movement diagnostics</summary><p>Last 200 pose checks. Positions and errors are millimeters; headings are degrees. Copy this if a physical run stops unexpectedly.</p><textarea id="diagnostics-json" readonly aria-label="Movement diagnostics JSON" spellcheck="false"></textarea><button class="btn small" id="copy-diagnostics">Copy diagnostics</button><span id="diagnostics-copy-status" class="micro"></span></details>
+<details><summary>How Auto-Wait, Bluetooth, and lights work</summary><p>A gets first priority; others follow creation order. Heading-aware A* minimizes turns, then distance. Each step reserves its source and destination tiles until every dispatched command finishes. Adjacent starts and movement are allowed. Lower-priority robots wait on their tile with orange lights when traffic conflicts. A never yields; it routes around parked robots or flashes yellow if no route exists.</p>
+<pre class="architecture">Virtual fleet registry -- unplaced robots stay on bench
+        |
+Placed robots: A, B, C, ...
+        |
+Shared map -> priority A* + space-time reservations
+        |
+        +-- clear route --> independent BLE queues --> completion barrier
+        +-- B/C/... conflict -> motors halted + orange Auto-Wait
+        +-- map blocked --> motors halted + flashing yellow
+
+Any bumper -> halt fleet -> recover confirmed poses -> update shared map -> cascade replan
+Any top touch -> halt fleet -> flashing red latch -> manual reset at marked starts</pre>
+<p>Auto-Wait resumes when traffic clears. It cannot resolve permanent occupied-space deadlocks by itself: if every route is held, the fleet remains stationary until you stop and change the layout. No robot is teleported or allowed to pass through a waiter.</p><p>Virtual cards have no fixed application limit; your map and Bluetooth adapter limit how many real robots can operate. Wheel encoders cannot detect every slip or external push. Physical fleet motion remains untested. Keep the page visible on a flat supported surface; a disconnected robot might not receive a stop request.</p><p>The <a href="https://github.com/PoweredBySAM/sam-root-ble-protocol#command-2---set-led-animation" target="_blank" rel="noopener">documented LED packet</a> controls the whole top cross: device 3, command 2, payload [animation, R, G, B]. It has no side selector. Hardware uses shared red blinking for turns. Completion flashes yellow, orange, then green.</p></details>
+</main>
+<dialog id="code-drawer"><div class="drawer-head"><h2>Python fallback</h2><button class="text-button" id="close-drawer">Close</button></div><p class="micro">One robot at a time. These map snapshots do not coordinate a fleet, recover from bumps, or listen for touch stops. Remove all other robots from the board before running an export.</p><label>Robot <select id="export-robot"></select></label><label>Format <select id="format"><option value="level3">Level 3 event sequence</option><option value="playground">Complete Python SDK script</option></select></label><p class="micro" id="python-edit-note">Edit generated Python before copying or downloading it.</p><textarea id="python-code" spellcheck="false" aria-label="Generated Python code"></textarea><div class="drawer-actions"><button class="btn" id="copy-code">Copy Code</button><button class="btn" id="download-code">Download .py</button><button class="text-button" id="reset-python-code">Regenerate route code</button></div><p class="micro" id="copy-status"></p></dialog>
+<dialog id="calibration-dialog"><div class="drawer-head"><h2>Measure the image</h2><button class="text-button" id="close-calibration">Close</button></div><p class="micro" id="calibration-help">Tap two points with a known real-world distance. Use an undistorted, top-down image.</p>
+<div class="calibration-stage" id="calibration-stage"><img id="calibration-image" alt="Reference for scale calibration"><button id="calibration-pick" aria-label="Choose two calibration points"></button><svg id="calibration-marks" aria-hidden="true" preserveAspectRatio="none"></svg></div>
+<div class="calibration-fields"><label class="field">Known distance (cm)<input id="known-distance" type="number" min="0.1" step="0.1" value="64"></label><label class="field">Tile span in reference<input id="reference-span" type="number" min="0.1" step="0.1" value="1"></label><button class="btn" id="apply-calibration" disabled>Apply calibration</button><button class="text-button" id="clear-calibration">Clear points</button></div><p class="micro" id="calibration-result">Choose two points.</p><p class="micro calibration-error" id="calibration-error"></p></dialog>
+<dialog id="map-dialog"><div class="drawer-head"><h2>Save your floor plan</h2><button class="text-button" id="close-map">Close</button></div><p class="micro">Includes dimensions, background image and obstacles. Robot missions are configured separately.</p><textarea id="map-json" readonly spellcheck="false" aria-label="Saved floor plan JSON"></textarea><div class="drawer-actions"><button class="btn" id="download-map">Download JSON</button><button class="btn" id="copy-map">Copy JSON</button></div><p class="micro" id="map-save-status"></p></dialog>
+<script id="core">'use strict';
+/* Root rt0/rt1 — a front-end planner and reactive mission controller.
+ * Grid compass: N=0, E=90, S=180, W=270. Relative BLE turns are clockwise-positive.
+ * Bump recovery never guesses that an interrupted 16 cm move was completed.
+ * The last acknowledged cell and pre-move odometry are kept separately.
+ */
+// One shared calibrated environment. UI changes it only while no mission runs.
+// Rectangular tiles use height for N/S and width for E/W, in 0.1 cm precision
+// (the Root protocol's millimeter unit). No robot-body/separation model exists.
+const GRID={cols:4,rows:4,tileWidthCm:16,tileHeightCm:16};
+let CELL_CM=16,TURN_COST=64;
+function validateEnvironment(value){
+  const {cols,rows,tileWidthCm,tileHeightCm}=value;
+  if(!Number.isInteger(cols)||!Number.isInteger(rows)||cols<1||rows<1||cols>32||rows>32)throw new Error('Grid dimensions must be whole numbers from 1 to 32.');
+  if(![tileWidthCm,tileHeightCm].every(n=>Number.isFinite(n)&&n>=1&&n<=200))throw new Error('Tile dimensions must be between 1 and 200 cm.');
+  return {cols,rows,tileWidthCm:Math.round(tileWidthCm*10)/10,tileHeightCm:Math.round(tileHeightCm*10)/10};
+}
+function setEnvironment(value){Object.assign(GRID,validateEnvironment(value));CELL_CM=Math.min(GRID.tileWidthCm,GRID.tileHeightCm);TURN_COST=4*GRID.cols*GRID.rows*Math.max(GRID.tileWidthCm,GRID.tileHeightCm)/CELL_CM;}
+const tileCm=heading=>heading%180===0?GRID.tileHeightCm:GRID.tileWidthCm;
+// Image measurement is in IMAGE pixels, not display/CSS pixels. Two points
+// plus one known real distance define a uniform scale for a top-down image.
+function calibrateImage(width,height,a,b,knownCm,cols,rows){
+  const pixels=Math.hypot(b.x-a.x,b.y-a.y);
+  if(![width,height,knownCm,pixels].every(n=>Number.isFinite(n)&&n>0)||pixels<2)throw new Error('Choose two distinct reference points and a positive distance.');
+  const cmPerPixel=knownCm/pixels;
+  return validateEnvironment({cols,rows,tileWidthCm:width*cmPerPixel/cols,tileHeightCm:height*cmPerPixel/rows});
+}
+const HEADINGS=['North','East','South','West'];
+const ROOT_UUID=Object.freeze({identifier:'48c5d828-ac2a-442d-97a3-0c9822b04979',uart:'6e400001-b5a3-f393-e0a9-e50e24dcca9e',rx:'6e400002-b5a3-f393-e0a9-e50e24dcca9e',tx:'6e400003-b5a3-f393-e0a9-e50e24dcca9e'});
+const key=p=>`${p.x},${p.y}`;
+const inside=p=>Number.isInteger(p.x)&&Number.isInteger(p.y)&&p.x>=0&&p.x<GRID.cols&&p.y>=0&&p.y<GRID.rows;
+const sameCell=(a,b)=>a.x===b.x&&a.y===b.y;
+function validateMission(start,target){if(!start||!target||!inside(start)||!inside(target)||![0,90,180,270].includes(start.heading))throw new Error('Choose valid start/target tiles and a compass heading.');}
+function ahead(p){return {x:p.x+(p.heading===90?1:p.heading===270?-1:0),y:p.y+(p.heading===0?1:p.heading===180?-1:0)};}
+function quarterTurns(a,b){const d=(b-a+360)%360;return Math.min(d,360-d)/90;}
+function headingTo(a,b){if(Math.abs(a.x-b.x)+Math.abs(a.y-b.y)!==1)throw new Error('Route cells must be adjacent.');return b.x>a.x?90:b.x<a.x?270:b.y>a.y?0:180;}
+/* Admissible A* heuristic: ignore obstacles and choose the better of the two
+ * axis orders. Count the minimum compass rotations needed for displacement
+ * and, optionally, the final heading. Obstacles cannot reduce this bound.
+ * Cost = TURN_COST*quarterTurns + physicalDistance/minTileSize. TURN_COST
+ * exceeds every simple path's distance in this grid's (x,y,heading) graph.
+ * Thus one fewer turn always wins; physical distance breaks equal-turn ties.
+ * At the default 4x4 / 16 cm grid this reduces to 64*turns + tileSteps. This is
+ * the requested turn-first objective, not a fabricated time in seconds.
+ */
+function heuristic(p,goal,finalHeading=null){
+  const dx=goal.x-p.x,dy=goal.y-p.y,axes=[];
+  if(dx)axes.push(dx>0?90:270);if(dy)axes.push(dy>0?0:180);
+  const orders=axes.length===2?[axes,[axes[1],axes[0]]]:[axes];
+  const rotations=Math.min(...orders.map(order=>{
+    let h=p.heading,n=0;for(const desired of order){n+=quarterTurns(h,desired);h=desired;}
+    if(finalHeading!==null)n+=quarterTurns(h,finalHeading);return n;
+  }));
+  return (Math.abs(dx)*GRID.tileWidthCm+Math.abs(dy)*GRID.tileHeightCm)/CELL_CM+TURN_COST*rotations;
+}
+function commandsFromPoints(points,start,phase='Outbound',finalHeading=null){
+  let p={...start};const commands=[];
+  function face(desired){const d=(desired-p.heading+360)%360;for(const degrees of d===270?[-90]:Array(d/90).fill(90)){p.heading=(p.heading+degrees+360)%360;commands.push({kind:'turn',degrees,phase,pose:{...p}});}}
+  if(!sameCell(points[0],start))throw new Error('Path must begin at the current cell.');
+  for(let i=1;i<points.length;i++){face(headingTo(p,points[i]));p.x=points[i].x;p.y=points[i].y;commands.push({kind:'move',cm:tileCm(p.heading),phase,pose:{...p}});}
+  if(finalHeading!==null)face(finalHeading);
+  return {commands,points:points.map(p=>({...p})),end:{...p},steps:points.length-1,turns:commands.filter(c=>c.kind==='turn').length};
+}
+function aStar(start,goal,blocked=new Set(),finalHeading=null){
+  validateMission(start,goal);
+  if(finalHeading!==null&&![0,90,180,270].includes(finalHeading))throw new Error('Invalid final heading.');
+  if(blocked.has(key(start))||blocked.has(key(goal)))return null;
+  const id=p=>`${p.x},${p.y},${p.heading}`;
+  const origin=id(start),scores=new Map([[origin,0]]),parents=new Map();
+  const open=[{...start,g:0,f:heuristic(start,goal,finalHeading)}];
+  while(open.length){
+    // Small floor plans use a sorted frontier; stale entries are discarded below.
+    open.sort((a,b)=>a.f-b.f||a.g-b.g||a.heading-b.heading);
+    const current=open.shift(),currentId=id(current);
+    if(current.g!==scores.get(currentId))continue; // Skip obsolete frontier entries.
+    if(sameCell(current,goal)&&(finalHeading===null||current.heading===finalHeading)){
+      const reversed=[];let cursor=currentId;
+      while(cursor!==origin){const parent=parents.get(cursor);reversed.push(parent.action);cursor=parent.previous;}
+      const commands=reversed.reverse();const points=[{x:start.x,y:start.y}];
+      for(const command of commands)if(command.kind==='move')points.push({x:command.pose.x,y:command.pose.y});
+      return {commands,points,end:{x:current.x,y:current.y,heading:current.heading},steps:points.length-1,turns:commands.filter(c=>c.kind==='turn').length,cost:current.g};
+    }
+    const candidates=[-90,90].map(degrees=>({pose:{x:current.x,y:current.y,heading:(current.heading+degrees+360)%360},kind:'turn',degrees,cost:TURN_COST}));
+    const next=ahead(current);
+    if(inside(next)&&!blocked.has(key(next)))candidates.push({pose:{...next,heading:current.heading},kind:'move',cm:tileCm(current.heading),cost:tileCm(current.heading)/CELL_CM});
+    for(const candidate of candidates){
+      const candidateId=id(candidate.pose),g=current.g+candidate.cost;
+      if(g>=(scores.get(candidateId)??Infinity))continue;
+      const {cost,...action}=candidate;action.phase='Outbound';
+      scores.set(candidateId,g);parents.set(candidateId,{previous:currentId,action});
+      open.push({...candidate.pose,g,f:g+heuristic(candidate.pose,goal,finalHeading)});
+    }
+  }
+  return null;
+}
+function payloadAt(p){return [
+  {kind:'lights',mode:2,rgb:[0,255,0],phase:'Target action',pose:{...p}},
+  {kind:'wait',seconds:2,phase:'Target action',pose:{...p}},
+  {kind:'lights',mode:1,rgb:[0,255,0],phase:'Target action',pose:{...p}},
+  {kind:'note',hz:659,seconds:.15,phase:'Success chime',pose:{...p}},
+  {kind:'note',hz:880,seconds:.25,phase:'Success chime',pose:{...p}},
+  {kind:'lights',mode:0,rgb:[0,0,0],phase:'Target action',pose:{...p}}
+];}
+function previewPlan(start,target,blocked){
+  const outbound=aStar(start,target,blocked);if(!outbound)return null;
+  // Independent return search includes the initial heading as its goal state.
+  // Arrival heading matters; neither search reads or reverses travel history.
+  const back=aStar(outbound.end,start,blocked,start.heading);if(!back)return null;
+  back.commands.forEach(c=>c.phase='Return');
+  const commands=[...outbound.commands,...payloadAt(outbound.end),...back.commands];
+  return {start:{...start},target:{...target},points:outbound.points,returnPoints:back.points,commands,
+    steps:outbound.steps,returnSteps:back.steps,totalSteps:outbound.steps+back.steps,
+    turns:outbound.turns+back.turns,outboundTurns:outbound.turns,returnTurns:back.turns,
+    returnCost:back.cost,name:'A* · independent round trip',finalPose:back.end};
+}
+function safetyMode(c){return c.kind==='move'?'drive':c.degrees<0?'left':'right';}
+function sameTurn(a,b){return a?.kind==='turn'&&b?.kind==='turn'&&Math.sign(a.degrees)===Math.sign(b.degrees);}
+/* Desired left/right indicators. Stock Root can address only the whole LED
+ * cross; shared=true previews the real hardware fallback rather than claiming
+ * that two independent colors/patterns were sent through an unsupported API. */
+function lightingState(cue,shared=false){
+  if(cue.type==='payload')return {left:{rgb:cue.rgb,blink:cue.mode===2},right:{rgb:cue.rgb,blink:cue.mode===2}};
+  const red=cue.mode==='off'?[0,0,0]:[255,0,0],turn=cue.mode==='left'||cue.mode==='right';
+  return {left:{rgb:red,blink:turn&&(shared||cue.mode==='left')},right:{rgb:red,blink:turn&&(shared||cue.mode==='right')}};
+}
+/* Valid stock Level 3 calls. There is no set_left/right_led API. The Python
+ * snapshot uses the firmware's shared blink animation during turns; rapid
+ * shared blinking in Web Bluetooth is timed locally by the browser. */
+function pythonCommands(plan){
+  const result=[];let cue=null;
+  for(let i=0;i<plan.commands.length;i++){
+    const c=plan.commands[i];
+    if(c.kind==='move'||c.kind==='turn'){
+      const mode=safetyMode(c);
+      if(cue!==mode)result.push({kind:'lights',mode:mode==='drive'?1:2,rgb:[255,0,0],phase:c.phase,pose:c.pose});
+      cue=mode;result.push(c);
+      if(c.kind==='turn'&&!sameTurn(c,plan.commands[i+1])){result.push({kind:'lights',mode:1,rgb:[255,0,0],phase:c.phase,pose:c.pose});cue='drive';}
+    }else{result.push(c);if(c.kind==='lights')cue=null;}
+  }
+  result.push({kind:'lights',mode:0,rgb:[0,0,0],phase:'Mission complete',pose:plan.finalPose});
+  return result;
+}
+function pythonFor(plan,format='level3'){
+  if(!['level3','playground'].includes(format))throw new Error('Unknown output format.');
+  const s=plan.start,t=plan.target;
+  const lines=[`# Root rt0/rt1: ${GRID.cols}x${GRID.rows} map; tiles ${GRID.tileWidthCm} x ${GRID.tileHeightCm} cm.`,`# Start (${s.x}, ${s.y}, ${HEADINGS[s.heading/90]}); target (${t.x}, ${t.y}).`,
+    `# Round trip: ${Math.round(plan.commands.filter(c=>c.kind==='move').reduce((n,c)=>n+Math.abs(c.cm),0)*10)/10} cm; ${plan.turns} quarter-turns.`,
+    '# Static map snapshot: separate A* outbound and return routes.',
+    '# Stock Root LEDs are shared: red driving, shared red blinking for turns.',
+    '# Live bumper recovery and rapid blink timing run in the web app.',
+    '# Place the robot at the start tile center, facing the selected heading.'];
+  if(format==='playground')lines.push('','from irobot_edu_sdk.backend.bluetooth import Bluetooth','from irobot_edu_sdk.robots import Root, event','','robot = Root(Bluetooth())');
+  else lines.push('# Level 3 supplies robot and event; recreate this sequence in its code blocks.','# Raw .py import into the Coding App was not verified.');
+  lines.push('','@event(robot.when_play)','async def play(robot):');let phase='';
+  for(const c of pythonCommands(plan)){
+    if(c.phase!==phase){phase=c.phase;lines.push(`    # ${phase}`);}
+    if(c.kind==='move')lines.push(`    await robot.move(${c.cm})`);
+    if(c.kind==='turn')lines.push(`    await robot.turn_${c.degrees>0?'right':'left'}(${Math.abs(c.degrees)})`);
+    if(c.kind==='wait')lines.push(`    await robot.wait(${c.seconds})`);
+    if(c.kind==='note')lines.push(`    await robot.play_note(${c.hz}, ${c.seconds})`);
+    if(c.kind==='lights')lines.push(c.mode===0?'    await robot.set_lights_off()':`    await robot.set_lights_${c.mode===2?'blink':'on'}_rgb(${c.rgb.join(', ')})`);
+  }
+  lines.push(`    # Back at (${s.x}, ${s.y}), facing ${HEADINGS[s.heading/90]}.`);
+  if(format==='playground')lines.push('','robot.play()');return lines.join('\n')+'\n';
+}
+/* Root pose replies: absolute packet bytes 7..10=X mm, 11..14=Y mm,
+ * 15..16=CCW yaw in decidegrees. This local odometry frame is independent of
+ * the board's compass. Compare poses in that frame before/after one move.
+ */
+function parseWirePose(bytes){if(!bytes||bytes.length!==20)throw new Error('Missing odometry reply.');const v=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);return {x:v.getInt32(7,false),y:v.getInt32(11,false),yaw:v.getInt16(15,false)/10};}
+function angleDifference(a,b){const d=((a-b)%360+360)%360;return Math.min(d,360-d);}
+function movementDelta(before,after){const theta=before.yaw*Math.PI/180,dx=after.x-before.x,dy=after.y-before.y;return {forward:dx*Math.cos(theta)+dy*Math.sin(theta),side:-dx*Math.sin(theta)+dy*Math.cos(theta),rotation:angleDifference(after.yaw,before.yaw)};}
+function validateStep(before,after,cm){const d=movementDelta(before,after);if(Math.abs(d.forward-cm*10)>20||Math.abs(d.side)>15||d.rotation>10)throw new Error('Movement odometry did not confirm the cell step. Reposition Root.');}
+function validateTurn(before,after,degrees){
+  // A completion packet alone does not prove the requested orientation.
+  // Check native yaw and in-place rotation before committing the grid heading.
+  if(angleDifference(after.yaw,before.yaw-degrees)>10 || Math.hypot(after.x-before.x,after.y-before.y)>15)throw new Error('Turn odometry did not confirm the heading. Reposition Root.');
+}
+function recoveryDistance(before,after,maxCm=CELL_CM){const d=movementDelta(before,after);if(d.forward < -5||d.forward>maxCm*10+15||Math.abs(d.side)>15||d.rotation>10)throw new Error('Cannot locate the interrupted movement reliably. Reposition Root.');return Math.max(0,d.forward)/10;}
+function verifyRecovered(before,after){if(Math.hypot(after.x-before.x,after.y-before.y)>15||angleDifference(after.yaw,before.yaw)>10)throw new Error('Recovery did not confirm the last cell center. Reposition Root.');}
+/* MissionRunner owns confirmed grid state and the actual outbound trail.
+ * A bump aborts ONLY the in-flight step, not the entire mission. The halted
+ * partial step is backed out using odometry, so A* starts from a known center.
+ * There is no retry limit. Every newly learned cell is excluded on replanning;
+ * the run ends only at its goal, an unreachable map, user Stop, or a real fault.
+ */
+class MissionRunner{
+  constructor(start,target,blocked,adapter,hooks={}){
+    validateMission(start,target);this.start={...start};this.target={...target};this.blocked=blocked;this.adapter=adapter;this.hooks=hooks;
+    this.pose={...start};this.trail=[{x:start.x,y:start.y}];this.returnTrail=[];this.controller=new AbortController();this.inFlight=null;this.bumpCycle=null;this.recovering=false;this.leg='Outbound';this.count=0;this.completed=false;this.stopPromise=null;
+  }
+  emit(name,...args){this.hooks[name]?.(...args);}
+  fail(reason){if(this.controller.signal.aborted)return;this.emit('status',reason,'error');this.emit('lighting',{type:'safety',mode:'off'});this.controller.abort();this.stopPromise=this.adapter.stop();}
+  stop(reason='Stopped by you.'){this.fail(reason);}
+  bump(){
+    if(this.controller.signal.aborted)return;
+    if(this.bumpCycle){if(this.recovering)this.fail('New contact during recovery. Reposition Root.');return;}
+    const step=this.inFlight;
+    if(!step||step.command.kind!=='move'||step.command.cm<=0){this.fail('Bump outside a forward cell step. Reposition Root.');return;}
+    const obstacle=ahead(step.from);
+    // Lock the step synchronously before any finished notification can commit it.
+    step.controller.abort();
+    this.bumpCycle={...step,obstacle,haltPromise:this.adapter.haltMotors()};
+    this.bumpCycle.haltPromise.catch(()=>{});
+    this.emit('status','Bump Detected! Rerouting…','bump');
+  }
+  async setLighting(mode,signal){await this.adapter.setSafetyLight?.(mode,signal);this.emit('lighting',{type:'safety',mode});}
+  async recover(){
+    const cycle=this.bumpCycle,signal=this.controller.signal;
+    this.recovering=true;await cycle.haltPromise;checkAbort(signal);
+    if(!inside(cycle.obstacle))throw new Error('Contact at the board boundary. Reposition Root.');
+    this.blocked.add(key(cycle.obstacle));this.emit('obstacle',cycle.obstacle);
+    const stopped=await (this.adapter.readStoppedPose?this.adapter.readStoppedPose(signal):this.adapter.readPose(signal)),distance=recoveryDistance(cycle.before,stopped,cycle.command.cm);
+    if(distance>.1){
+      const command={kind:'move',cm:-distance,phase:'Recover cell center',pose:{...cycle.from}};
+      await this.setLighting('drive',signal);this.emit('step',command);await this.adapter.execute(command,signal);
+    }
+    verifyRecovered(cycle.before,await this.adapter.readPose(signal));
+    await this.adapter.waitForRelease(signal);checkAbort(signal);
+    this.pose={...cycle.from};this.emit('pose',this.pose);
+    this.bumpCycle=null;this.recovering=false;
+    this.emit('status',`Obstacle learned. Rerouting ${this.leg.toLowerCase()}…`,'bump');
+  }
+  async perform(command,recordTrail=false){
+    const signal=this.controller.signal;checkAbort(signal);
+    const child=new AbortController(),abortChild=()=>child.abort();signal.addEventListener('abort',abortChild,{once:true});
+    const from={...this.pose};let before=null;
+    try{
+      if(command.kind==='move'||command.kind==='turn')before=await this.adapter.readPose(signal);
+      checkAbort(signal);
+      if(command.kind==='move'||command.kind==='turn')await this.setLighting(safetyMode(command),child.signal);
+      this.inFlight={command,controller:child,from,before};this.emit('step',command);
+      const result=await this.adapter.execute(command,child.signal);
+      if(command.kind==='lights')this.emit('lighting',{type:'payload',mode:command.mode,rgb:command.rgb});
+      if(this.bumpCycle)throw abortError();
+      checkAbort(signal);checkAbort(child.signal);
+      if(command.kind==='move')validateStep(before,result?.wirePose||await this.adapter.readPose(signal),command.cm);
+      if(command.kind==='turn')validateTurn(before,result?.wirePose||await this.adapter.readPose(signal),command.degrees);
+      if(command.kind==='turn'&&!command.keepTurnSignal)await this.setLighting('drive',child.signal);
+      this.pose={...command.pose};if(recordTrail&&command.kind==='move')this.trail.push({x:this.pose.x,y:this.pose.y});
+      if(this.leg==='Return'&&command.kind==='move')this.returnTrail.push({x:this.pose.x,y:this.pose.y});
+      this.count++;this.emit('pose',this.pose);this.emit('progress',this.count);return true;
+    }catch(error){
+      if(this.bumpCycle&&!signal.aborted){await this.recover();return false;}
+      throw error;
+    }finally{signal.removeEventListener('abort',abortChild);this.inFlight=null;this.emit('availability');}
+  }
+  async navigate(goal,initialPath=null,finalHeading=null,recordTrail=false){
+    let path=initialPath;
+    while(true){
+      checkAbort(this.controller.signal);
+      if(!path)path=aStar(this.pose,goal,this.blocked,finalHeading);
+      if(!path)throw new Error(`Unreachable: ${this.leg==='Return'?'start':'target'} is walled off.`);
+      // Both legs use a fresh heading-aware A* search after every discovery.
+      if(path.points.some(p=>this.blocked.has(key(p)))){path=null;continue;}
+      path.commands.forEach(c=>c.phase=this.leg);this.emit('path',path.points,this.leg);
+      let interrupted=false;
+      for(let i=0;i<path.commands.length;i++){const command={...path.commands[i],keepTurnSignal:sameTurn(path.commands[i],path.commands[i+1])};if(!await this.perform(command,recordTrail)){interrupted=true;break;}}
+      if(!interrupted)return;
+      path=null; // Replan from confirmed pose and the enlarged obstacle map.
+    }
+  }
+  async run(){
+    try{
+      await this.adapter.begin(this.controller.signal);
+      await this.navigate(this.target,null,null,true);
+      for(const command of payloadAt(this.pose))await this.perform(command);
+      this.leg='Return';this.returnTrail=[{x:this.pose.x,y:this.pose.y}];
+      this.emit('status','Recalculating Optimal Return Path…');
+      await this.navigate(this.start,null,this.start.heading,false);
+      await this.setLighting('off',this.controller.signal);
+      this.completed=true;this.emit('status','Trip complete. Original tile and heading restored.','success');return {pose:this.pose,trail:this.trail,count:this.count};
+    }catch(error){
+      if(!this.stopPromise)this.stopPromise=this.adapter.stop();await this.stopPromise;this.emit('lighting',{type:'safety',mode:'off'});
+      if(error.name!=='AbortError')this.emit('status',error.message,'error');
+      throw error;
+    }
+  }
+}
+/* SimulatorAdapter uses the same runner, A*, interruption and recovery logic.
+ * Its local odometry interpolates an in-flight move. The Test bump button can
+ * therefore exercise partial-step rollback and repeated reroutes in the UI.
+ */
+class SimulatorAdapter{
+  constructor(onAnimation=()=>{}){this.wire={x:0,y:0,yaw:90};this.motion=null;this.onAnimation=onAnimation;}
+  async setSafetyLight(mode,signal){checkAbort(signal);this.lightMode=mode;}
+  async begin(){this.wire={x:0,y:0,yaw:90};this.motion=null;}
+  current(){if(!this.motion)return {...this.wire};const m=this.motion,f=Math.min(1,Math.max(0,(Date.now()-m.time)/m.ms));return {x:m.from.x+(m.to.x-m.from.x)*f,y:m.from.y+(m.to.y-m.from.y)*f,yaw:m.from.yaw+(m.to.yaw-m.from.yaw)*f};}
+  async readPose(signal){checkAbort(signal);return this.current();}
+  async haltMotors(){this.wire=this.current();this.motion=null;}
+  async stop(){await this.haltMotors();return true;}
+  async emergencyStop(){await this.haltMotors();await this.setSafetyLight('emergency');}
+  async waitForRelease(signal){checkAbort(signal);}
+  async execute(command,signal){
+    const ms=command.kind==='move'?650:command.kind==='turn'?230:command.kind==='wait'?command.seconds*1000:command.kind==='note'?command.seconds*1000:25;
+    const from=this.current(),to={...from};
+    if(command.kind==='move'){const theta=from.yaw*Math.PI/180;to.x+=command.cm*10*Math.cos(theta);to.y+=command.cm*10*Math.sin(theta);}
+    if(command.kind==='turn')to.yaw-=command.degrees;
+    if(command.kind==='move'||command.kind==='turn')this.motion={from,to,time:Date.now(),ms};
+    this.onAnimation(command,ms);
+    try{await delay(ms,signal);if(this.motion){this.wire=to;this.motion=null;}return {wirePose:{...this.wire}};}
+    catch(error){await this.haltMotors();throw error;}
+  }
+}
+
+/* CRC-8/ATM: polynomial 0x07, initial 0x00, no reflection, no final XOR.
+ * Root's checksum covers the first 19 bytes, including all zero padding. */
+function crc8(bytes) {
+  let crc=0;
+  for(const byte of bytes) {
+    crc^=byte;
+    for(let bit=0;bit<8;bit++) crc=((crc&0x80)?(crc<<1)^0x07:crc<<1)&0xff;
+  }
+  return crc;
+}
+function packet(device,command,id,payload=new Uint8Array()) {
+  if(payload.length>16) throw new Error('Root payload exceeds 16 bytes.');
+  const bytes=new Uint8Array(20);
+  bytes.set([device,command,id]); bytes.set(payload,3);
+  bytes[19]=crc8(bytes.subarray(0,19));
+  return bytes;
+}
+function int32(value) {const b=new Uint8Array(4);new DataView(b.buffer).setInt32(0,value,false);return b;}
+function encodeCommand(c) {
+  // All multibyte fields are big-endian. cm -> mm; degrees -> decidegrees.
+  if(c.kind==='move') return {device:1,command:8,payload:int32(Math.round(c.cm*10)),reply:true};
+  if(c.kind==='turn') return {device:1,command:12,payload:int32(Math.round(c.degrees*10)),reply:true};
+  if(c.kind==='lights') return {device:3,command:2,payload:Uint8Array.of(c.mode,...c.rgb),reply:false};
+  if(c.kind==='note') {
+    const bytes=new Uint8Array(6),view=new DataView(bytes.buffer);
+    view.setUint32(0,c.hz,false);view.setUint16(4,Math.round(c.seconds*1000),false);
+    return {device:5,command:0,payload:bytes,reply:true};
+  }
+  throw new Error('Command is not a BLE packet. Waits are scheduled by the browser.');
+}
+function abortError(){return new DOMException('Route cancelled.','AbortError');}
+function checkAbort(signal){if(signal?.aborted) throw abortError();}
+function delay(ms,signal) {
+  return new Promise((resolve,reject)=>{
+    if(signal?.aborted){reject(abortError());return;}
+    const onAbort=()=>{clearTimeout(timer);signal.removeEventListener('abort',onAbort);reject(abortError());};
+    const timer=setTimeout(()=>{signal?.removeEventListener('abort',onAbort);resolve();},ms);
+    signal?.addEventListener('abort',onAbort,{once:true});
+  });
+}
+/*
+ * Web Bluetooth transport. This class has no UI or simulator dependency.
+ * A GATT write response acknowledges delivery, not the end of a motor action.
+ * We subscribe BEFORE writing, register the expected (device,command,id), and
+ * await Root's matching finished packet for distance, rotation, and sound.
+ * Only short characteristic writes enter the write queue. Waiting for a motor
+ * reply occurs outside it, so Stop can interrupt a movement immediately.
+ * A missing reply fails closed; it never advances to the next motor command.
+ */
+class RootBLE {
+  constructor(onStatus=()=>{},onFault=()=>{},onBump=()=>{},onTouch=()=>{}) {
+    this.device=null;this.rx=null;this.tx=null;this.ready=false;this.connecting=false;
+    this.signalController=null;this.signalTask=null;this.signalMode=null;
+    this.id=0;this.lastMotionStamp=null;this.pending=new Map();this.writeTail=Promise.resolve();this.epoch=0;
+    this.onStatus=onStatus;this.onFault=onFault;this.onBump=onBump;this.onTouch=onTouch;this.bumperState=0;this.touchState=0;
+    this.notification=this.handleNotification.bind(this);
+    this.disconnected=this.handleDisconnect.bind(this);
+  }
+  get connected(){return this.ready && !!this.device?.gatt?.connected;}
+  async connect(excludedIds=new Set()) {
+    if(this.connecting || this.connected) return;
+    if(!globalThis.isSecureContext) throw new Error('Bluetooth needs HTTPS or localhost.');
+    if(!navigator.bluetooth) throw new Error('Use Chrome or Edge with Web Bluetooth for physical execution.');
+    this.connecting=true;this.onStatus('connecting');
+    try {
+      // requestDevice must be called from the Connect Robot click gesture.
+      // Filter by Root's advertised identifier, not the user's mutable BLE name.
+      const device=await navigator.bluetooth.requestDevice({
+        filters:[{services:[ROOT_UUID.identifier]}], optionalServices:[ROOT_UUID.uart]
+      });
+      if(excludedIds.has(device.id))throw new Error('That Root is already assigned to another robot. Choose a different device.');
+      this.device=device;this.id=0;this.lastMotionStamp=null;this.bumperState=0;this.touchState=0;this.epoch++;
+      device.addEventListener('gattserverdisconnected',this.disconnected);
+      const server=await device.gatt.connect();
+      const service=await server.getPrimaryService(ROOT_UUID.uart);
+      this.rx=await service.getCharacteristic(ROOT_UUID.rx);
+      this.tx=await service.getCharacteristic(ROOT_UUID.tx);
+      this.tx.addEventListener('characteristicvaluechanged',this.notification);
+      await this.tx.startNotifications();
+      // Verify that the 20-byte protocol round-trip works before enabling GO.
+      await this.send(0,0,Uint8Array.of(0xa5),{reply:true,timeout:6000});
+      // Events normally default to enabled; explicitly enable the ones we use.
+      // A 128-bit mask is big-endian; device 0 occupies bit 0 of byte 15.
+      const mask=new Uint8Array(16);
+      for(const deviceId of [0,1,12,17,20]) mask[15-Math.floor(deviceId/8)]|=1<<(deviceId%8);
+      await this.send(0,7,mask);
+      this.ready=true;this.onStatus('connected',device.name||'Root');
+    } catch(error) {
+      this.ready=false;this.cancelPending(error);
+      this.detach();if(this.device?.gatt?.connected)this.device.gatt.disconnect();
+      this.rx=null;this.tx=null;this.device=null;
+      this.onStatus('disconnected');throw error;
+    } finally {this.connecting=false;}
+  }
+  detach() {
+    this.tx?.removeEventListener('characteristicvaluechanged',this.notification);
+    this.device?.removeEventListener('gattserverdisconnected',this.disconnected);
+  }
+  handleDisconnect() {
+    this.endSignal();
+    this.ready=false;this.epoch++;
+    this.cancelPending(new Error('Robot disconnected. Position may have changed.'));
+    this.detach();this.rx=null;this.tx=null;
+    this.onStatus('disconnected');this.onFault('Robot disconnected.');
+  }
+  cancelPending(error) {for(const entry of [...this.pending.values()]) entry.reject(error);}
+  handleNotification(event) {
+    const value=event.target.value;
+    const bytes=new Uint8Array(value.buffer,value.byteOffset,value.byteLength);
+    // Notifications may contain one or several complete 20-byte packets.
+    if(!bytes.length || bytes.length%20!==0) return;
+    for(let offset=0;offset<bytes.length;offset+=20) {
+      const p=bytes.subarray(offset,offset+20);
+      if(crc8(p.subarray(0,19))!==p[19]) continue; // Discard corrupt responses.
+      const [dev,cmd,id]=p;
+      // Capacitive TOUCH event: same UART TX notification subscription.
+      // Device 17, command 0; bytes 3..6 timestamp; byte 7 high nibble:
+      // FL=0x80, FR=0x40, rear-right=0x20, rear-left=0x10.
+      // Read every event (including release). Any pressed state invokes the
+      // idempotent fleet latch; a release NEVER resumes a stopped mission.
+      // Verified against the iRobot Education SDK's _when_touched_handler.
+      if(dev===17&&cmd===0){
+        this.touchState=p[7]&0xf0;
+        this.onTouch({pressed:!!this.touchState,frontLeft:!!(p[7]&0x80),frontRight:!!(p[7]&0x40),rearRight:!!(p[7]&0x20),rearLeft:!!(p[7]&0x10)});
+        continue;
+      }
+      // Device 12 / command 0 is a BUMPER EVENT on the UART TX stream;
+      // there is no separate bumper characteristic to subscribe to.
+      // Timestamp occupies bytes 3..6. Byte 7: left=0x80, right=0x40.
+      // Only a released->pressed edge starts recovery; held/switching bumpers
+      // must not launch concurrent reroutes or count the same contact twice.
+      if(dev===12&&cmd===0){
+        const previous=this.bumperState;this.bumperState=p[7]&0xc0;
+        if(this.bumperState && !previous)this.onBump({left:!!(p[7]&0x80),right:!!(p[7]&0x40)});
+        continue;
+      }
+      // Stop button, motor stall and cliff are faults, not inferred obstacles.
+      // Test events before matching replies: event IDs are robot-generated.
+      const fault=dev===0&&cmd===4?'Robot stop button pressed.':
+        dev===1&&cmd===29&&p[8]!==0?'Motor stall detected.':
+        dev===20&&cmd===0&&p[7]!==0?'Cliff detected.':null;
+      if(fault){this.onFault(fault);continue;}
+      const entry=this.pending.get(`${dev}:${cmd}:${id}`);
+      if(entry){
+        // IDs wrap after 255 during long sessions. Motion/pose response
+        // timestamps reject a delayed reply from an older ID cycle. Unsigned
+        // subtraction also handles the robot's 32-bit millisecond clock wrap.
+        if(dev===1 && [8,12,16].includes(cmd)){
+          const stamp=new DataView(p.buffer,p.byteOffset,p.byteLength).getUint32(3,false);
+          if(this.lastMotionStamp!==null && ((stamp-this.lastMotionStamp)>>>0)>0x80000000)continue;
+          this.lastMotionStamp=stamp;
+        }
+        entry.resolve(p.slice());
+      }
+    }
+  }
+  async write(bytes) {
+    // Prefer a reliable GATT write. Older browsers expose only writeValue.
+    // A timed-out write disconnects this session; a hanging GATT operation
+    // must not permit additional commands to slip through afterward.
+    if(!this.device?.gatt?.connected || !this.rx) throw new Error('Root is not connected.');
+    let timer;
+    const operation=this.rx.properties?.write && this.rx.writeValueWithResponse
+      ? this.rx.writeValueWithResponse(bytes)
+      : this.rx.writeValueWithoutResponse
+        ? this.rx.writeValueWithoutResponse(bytes)
+        : this.rx.writeValue(bytes);
+    try {
+      await Promise.race([operation,new Promise((_,reject)=>{
+        timer=setTimeout(()=>reject(new Error('Bluetooth write timed out.')),5000);
+      })]);
+      // UART supports unacknowledged writes; pace that fallback to avoid flooding.
+      if(!this.rx?.properties?.write) await delay(25);
+    } catch(error) {
+      this.ready=false;
+      if(this.device?.gatt?.connected)this.device.gatt.disconnect();
+      throw error;
+    } finally {clearTimeout(timer);}
+  }
+  send(dev,cmd,payload=new Uint8Array(),options={}) {
+    const {reply=false,signal,timeout=20000}=options,epoch=this.epoch;
+    // Serialize packet ID allocation and writes, but not completion waits.
+    const writeTask=this.writeTail.then(async()=>{
+      checkAbort(signal);
+      if(epoch!==this.epoch) throw new Error('Bluetooth session changed.');
+      const id=this.id;this.id=(this.id+1)&0xff;
+      const key=`${dev}:${cmd}:${id}`;
+      let response=null;
+      if(reply) {
+        response=new Promise((resolve,reject)=>{
+          let timer;
+          const cleanup=()=>{clearTimeout(timer);signal?.removeEventListener('abort',onAbort);this.pending.delete(key);};
+          const onAbort=()=>{cleanup();reject(abortError());};
+          this.pending.set(key,{resolve:p=>{cleanup();resolve(p);},reject:error=>{cleanup();reject(error);}});
+          signal?.addEventListener('abort',onAbort,{once:true});
+          timer=setTimeout(()=>{
+            this.pending.get(key)?.reject(new Error(`No completion reply for device ${dev}, command ${cmd}.`));
+          },timeout);
+        });
+        // A very fast abort may reject before the write finishes. Attach a
+        // handler immediately so the browser doesn't report an unhandled error.
+        response.catch(()=>{});
+      }
+      try {checkAbort(signal);await this.write(packet(dev,cmd,id,payload));}
+      catch(error){this.pending.get(key)?.reject(error);throw error;}
+      return {response}; // Nesting prevents this task from awaiting motor completion.
+    });
+    this.writeTail=writeTask.then(()=>undefined,()=>undefined);
+    return writeTask.then(async({response})=>{const result=response?await response:null;checkAbort(signal);return result;});
+  }
+  endSignal(){
+    // Cancel delays AND queued LED writes. Never leave a pulse task running
+    // after a turn, bump, Stop, disconnect, or completion.
+    this.signalController?.abort();this.signalController=null;this.signalMode=null;
+  }
+  async setSafetyLight(mode,signal){
+    checkAbort(signal);
+    if(!['off','drive','left','right','yield','error','emergency'].includes(mode))throw new Error('Invalid light cue.');
+    if(this.signalMode===mode && (mode==='drive'||this.signalController&&!this.signalController.signal.aborted))return;
+    this.endSignal();if(this.signalTask)await this.signalTask;checkAbort(signal);
+    if(['yield','error','emergency'].includes(mode)){
+      // Firmware animation 2 keeps flashing without browser timer callbacks.
+      const rgb=mode==='yield'?[255,165,0]:mode==='error'?[255,255,0]:[255,0,0];
+      await this.send(3,2,Uint8Array.of(mode==='yield'?1:2,...rgb),{signal});this.signalMode=mode;return;
+    }
+    // PUBLIC ROOT PROTOCOL: Device 3 / Command 2 accepts ONLY
+    // [animation, R, G, B]. It addresses the whole cross, not LED sides.
+    // No invented LED index, side mask, or undocumented command is sent.
+    await this.send(3,2,Uint8Array.of(mode==='off'?0:1,255,0,0),{signal});checkAbort(signal);
+    this.signalMode=mode;
+    if(mode==='off'||mode==='drive')return;
+    const controller=new AbortController();this.signalController=controller;
+    const cancel=()=>controller.abort();signal?.addEventListener('abort',cancel,{once:true});
+    // Host-timed 4 Hz SHARED red blink is the stock-hardware fallback.
+    // A GATT write is awaited for every pulse; no writes overlap or flood RX.
+    this.signalTask=(async()=>{
+      let on=false;
+      try{
+        while(true){await delay(125,controller.signal);await this.send(3,2,Uint8Array.of(on?1:0,255,0,0),{signal:controller.signal});on=!on;}
+      }catch(error){if(error.name!=='AbortError')this.onFault('LED write failed: '+error.message);}
+      finally{signal?.removeEventListener('abort',cancel);}
+    })();
+  }
+  async execute(command,signal) {
+    checkAbort(signal);
+    if(command.kind==='wait') return delay(command.seconds*1000,signal);
+    if(command.kind==='lights'){this.endSignal();if(this.signalTask)await this.signalTask;}
+    const encoded=encodeCommand(command);
+    const timeout=command.kind==='move'?Math.max(20000,Math.abs(command.cm)*1000):20000;
+    const result=await this.send(encoded.device,encoded.command,encoded.payload,{reply:encoded.reply,signal,timeout});
+    return result && (command.kind==='move'||command.kind==='turn')?{wirePose:parseWirePose(result)}:null;
+  }
+  async begin(signal) {
+    if(!this.connected)throw new Error('Root is not connected.');
+    if(this.bumperState)throw new Error('Release the bumpers before GO.');
+    if(this.touchState)throw new Error('Release the top touch pads before GO.');
+    // Fresh local frame at the manually positioned start. A reply to Get
+    // Position checks that this firmware supports the recovery prerequisite.
+    await this.haltMotors();await this.send(1,15,new Uint8Array(),{signal});
+    const origin=await this.readStoppedPose(signal);
+    if(Math.hypot(origin.x,origin.y)>10||angleDifference(origin.yaw,90)>5)throw new Error('Firmware did not confirm navigation reset.');
+    // Keep the MEASURED reset frame. The accepted reset tolerance must not
+    // silently become a zero-origin/90-degree assumption in fleet checks.
+    return origin;
+  }
+  async readPose(signal) {
+    const reply=await this.send(1,16,new Uint8Array(),{reply:true,signal,timeout:4000});
+    return parseWirePose(reply);
+  }
+  async readStoppedPose(signal) {
+    // GATT delivery is not proof that inertia has settled. Require two stable
+    // odometry samples before measuring the partial advance to roll back.
+    let previous=await this.readPose(signal);
+    for(let sample=0;sample<8;sample++){
+      await delay(75,signal);const current=await this.readPose(signal);
+      if(Math.hypot(current.x-previous.x,current.y-previous.y)<2 && angleDifference(current.yaw,previous.yaw)<1)return current;
+      previous=current;
+    }
+    throw new Error('Robot did not settle after motor stop. Reposition Root.');
+  }
+  async haltMotors() {
+    this.endSignal();
+    // 1/4 with left/right speed=0 stops movement WITHOUT the odometry reset
+    // caused by General 0/3. This is essential for partial-step recovery.
+    await this.send(1,4,new Uint8Array(8));
+  }
+  async waitForRelease(signal) {
+    const deadline=Date.now()+3000;
+    while(this.bumperState){checkAbort(signal);if(Date.now()>deadline)throw new Error('Bumper stayed pressed after recovery. Reposition Root.');await delay(25,signal);}
+  }
+  async stop() {
+    this.endSignal();
+    // General 0/3 cancels motor actions; also explicitly silence the payload.
+    // No turn or distance command is issued by stop().
+    this.cancelPending(abortError());
+    if(!this.device?.gatt?.connected)return false;
+    try {
+      await this.send(0,3);
+      await this.send(5,1);
+      await this.send(3,2,Uint8Array.of(0,0,0,0));
+      return true;
+    } catch(_){return false;}
+  }
+  async emergencyStop(){
+    // Drop old queued packets and completion waiters synchronously. Only a
+    // currently outstanding short GATT write can precede these stop packets.
+    // Do not await the distance/turn reply, backtrack, or reset grid pose here.
+    this.endSignal();this.epoch++;this.cancelPending(abortError());
+    if(!this.connected)throw new Error('Disconnected robot cannot confirm touch stop.');
+    await this.send(1,4,new Uint8Array(8)); // Zero both wheel speeds first.
+    await this.send(0,3);                 // Cancel firmware motion/project queue.
+    await this.send(5,1);                 // Silence any active success note.
+    await this.setSafetyLight('emergency'); // 3/2: [2, 255, 0, 0].
+  }
+  async disconnect() {
+    if(this.connected)await this.stop();
+    this.ready=false;this.epoch++;
+    this.cancelPending(new Error('Disconnected.'));this.detach();
+    if(this.device?.gatt?.connected)this.device.gatt.disconnect();
+    this.rx=null;this.tx=null;this.device=null;this.onStatus('disconnected');
+  }
+}
+
+/* DYNAMIC ROOT FLEET CONTROL — no network service, SDK dependency, or backend.
+ * Priority is planned, never improvised after two motor commands are sent.
+ * A reserves first; every subsequent robot uses space-time A* or stationary Auto-Wait.
+ * A barrier retains both endpoint tiles until EVERY dispatched command finishes.
+ * Thus a slow GATT link or different motor speeds cannot produce an edge swap.
+ */
+const FLEET_COLORS=Object.freeze({
+  drive:{hex:'#FF0000',rgb:[255,0,0]}, // shared solid red; turn side blinks in simulator
+  yield:{hex:'#FFA500',rgb:[255,165,0]}, // yielding robots; motors halted first
+  error:{hex:'#FFFF00',rgb:[255,255,0]}, // firmware blink animation 2
+  emergency:{hex:'#FF0000',rgb:[255,0,0]}, // touch latch: firmware red blink
+  success:{hex:'#00FF00',rgb:[0,255,0]},
+  off:{hex:'#000000',rgb:[0,0,0]}
+});
+const cloneState=s=>({pose:{...s.pose},leg:s.leg});
+/* TILE RESERVATIONS ONLY — no radius or inter-robot distance calculation.
+ * A step reserves its source AND destination until the whole fleet barrier
+ * completes. Other robots may use adjacent tiles, but cannot enter either
+ * reserved tile. This excludes same-tile arrivals, swaps, and premature
+ * following even when independent GATT connections finish at different times.
+ * This is a discrete tile model; it does not model the robots' physical bodies.
+ */
+function reservationSafe(aFrom,aCommand,bFrom,bCommand){
+  return [aFrom,aCommand.pose].every(a=>[bFrom,bCommand.pose].every(b=>!sameCell(a,b)));
+}
+function frameIsSafe(states,frame){const ids=Object.keys(states);return ids.every((a,i)=>ids.slice(i+1).every(b=>reservationSafe(states[a].pose,frame[a],states[b].pose,frame[b])));}
+function advanceState(state,c){return {pose:{...c.pose},leg:c.nextLeg??state.leg};}
+function completionAt(s,nextLeg){return {kind:'celebrate',pose:{...s.pose},phase:s.leg,nextLeg};}
+const compareCost=(a,b)=>a[0]-b[0]||a[1]-b[1]||a[2]-b[2];
+const addCost=(a,b)=>a.map((v,i)=>v+b[i]);
+class FleetHeap{
+  constructor(){this.items=[];}
+  push(n){const a=this.items;a.push(n);let i=a.length-1;while(i){const p=(i-1)>>1;if(compareCost(a[p].f,n.f)<=0)break;a[i]=a[p];i=p;}a[i]=n;}
+  pop(){const a=this.items,top=a[0],last=a.pop();if(a.length){let i=0;while(i*2+1<a.length){let c=i*2+1;if(c+1<a.length&&compareCost(a[c+1].f,a[c].f)<0)c++;if(compareCost(last.f,a[c].f)<=0)break;a[i]=a[c];i=c;}a[i]=last;}return top;}
+  get length(){return this.items.length;}
+}
+/* DYNAMIC FLEET: registry size is not the board's physical capacity.
+ * Unplaced virtual robots stay on the bench; every placed robot reserves space,
+ * including one with no target. IDs are stable A..Z, AA..AZ, BA.. without a cap.
+ */
+function robotLetter(index){let label='';for(let n=index+1;n>0;n=Math.floor((n-1)/26))label=String.fromCharCode(65+(n-1)%26)+label;return label;}
+const isParked=s=>s.leg==='Done'||s.leg==='Parked';
+/* Shared map = permanent/user/bump obstacles + CURRENT idle robot tiles.
+ * Keep occupancy as a derived, owner-labelled layer, never copy it into the
+ * permanent Set. Replanning after completion, benching, or a new mission then
+ * cannot leave ghost obstacles behind. Use live pose, never configured start.
+ * A robot excludes ONLY its own occupancy; permanent obstacles stay intact.
+ */
+function stationaryRobotTiles(states){return new Map(Object.entries(states).filter(([,s])=>isParked(s)).map(([id,s])=>[key(s.pose),id]));}
+function routingMap(blocked,stationary,observer){return new Set([...blocked,...[...stationary].filter(([,owner])=>owner!==observer).map(([tile])=>tile)]);}
+function waitingAt(s,id,reason=id==='A'?'Blocked · occupied route':'Auto-Wait · priority traffic',blocked=false){return {kind:isParked(s)?'park':blocked?'blocked':id==='A'?'hold':'yield',pose:{...s.pose},phase:s.leg,nextLeg:s.leg,reason};}
+function robotCandidates(s,config,blocked,id){
+  if(isParked(s))return [waitingAt(s,id)];
+  const goal=s.leg==='Outbound'?config.target:config.start;
+  if(sameCell(s.pose,goal)&&(s.leg!=='Return'||s.pose.heading===config.start.heading))return [completionAt(s,s.leg==='Outbound'?'Return':'Done'),...(id==='A'?[]:[waitingAt(s,id)])];
+  const result=id==='A'?[]:[waitingAt(s,id)];
+  for(const degrees of [-90,90])result.push({kind:'turn',degrees,pose:{...s.pose,heading:(s.pose.heading+degrees+360)%360},phase:s.leg,nextLeg:s.leg});
+  const next=ahead(s.pose);
+  if(inside(next)&&!blocked.has(key(next)))result.push({kind:'move',cm:tileCm(s.pose.heading),pose:{...next,heading:s.pose.heading},phase:s.leg,nextLeg:s.leg});
+  return result;
+}
+function scheduleStates(initial,commands){const result=[cloneState(initial)];for(const c of commands)result.push(advanceState(result.at(-1),c));return result;}
+/* Generalized space-time A* for one robot against EVERY other robot.
+ * Higher-priority robots have complete schedules. Lower-priority robots are
+ * conservatively held at their CURRENT positions while this schedule is built.
+ * Consequently, falling back to Auto-Wait for any lower robot is always safe:
+ * an already accepted higher route NEVER assumes that the lower robot vanished.
+ * Cost = lexicographic [turns, distance, waits]. Time saturates after all higher
+ * schedules finish; this finite graph detects interference without retry caps.
+ */
+function spaceTimeRoute(id,initial,config,blocked,reservations){
+  const horizon=Math.max(0,...reservations.map(r=>r.commands.length));
+  const uid=n=>`${key(n.pose)},${n.pose.heading},${n.leg},${n.t}`;
+  const estimate=n=>{if(isParked(n))return [0,0,0];const goal=n.leg==='Outbound'?config.target:config.start;
+    const h=heuristic(n.pose,goal,n.leg==='Return'?config.start.heading:null);return [Math.floor(h/TURN_COST),h%TURN_COST,0];};
+  const first={...cloneState(initial),t:0,g:[0,0,0]},open=new FleetHeap(),best=new Map(),parents=new Map();
+  first.f=estimate(first);open.push(first);best.set(uid(first),first.g);let found=null,visited=0;
+  while(open.length){
+    const n=open.pop(),nId=uid(n);if(compareCost(n.g,best.get(nId))!==0)continue;visited++;
+    if(isParked(n)&&n.t===horizon){found=n;break;}
+    for(const command of robotCandidates(n,config,blocked,id)){
+      if(!reservations.every(r=>{const t=Math.min(n.t,r.commands.length),other=r.states[t];return reservationSafe(n.pose,command,other.pose,r.commands[t]||waitingAt(other,r.id));}))continue;
+      const next={...advanceState(n,command),t:Math.min(n.t+1,horizon)};
+      next.g=addCost(n.g,[command.kind==='turn'?1:0,command.kind==='move'?command.cm/CELL_CM:0,['yield','park'].includes(command.kind)?1:0]);
+      const nextId=uid(next),old=best.get(nextId);if(old&&compareCost(next.g,old)>=0)continue;
+      best.set(nextId,next.g);parents.set(nextId,{previous:nId,command});next.f=addCost(next.g,estimate(next));open.push(next);
+    }
+  }
+  if(!found)return {commands:null,visited};
+  const reversed=[];let cursor=uid(found);while(cursor!==uid(first)){const edge=parents.get(cursor);reversed.push(edge.command);cursor=edge.previous;}
+  const commands=reversed.reverse();while(commands.at(-1)?.kind==='park')commands.pop();return {commands,visited};
+}
+/* AUTO-WAIT is a first-class result, not an exception or an unreachable error.
+ * The scheduler can return a mix of moving routes, stationary orange waiters,
+ * parked robots, and map-blocked yellow robots. A gets the first reservation.
+ * Order after A is creation order (B, C, ...). A holder never relinquishes its
+ * position. A routes around static robots through the shared map; if no path
+ * exists it is blocked (yellow), never yielding (orange) to another robot.
+ * Waiting alone cannot resolve permanent occupancy. We report that honestly
+ * and keep the fleet stopped until a relevant state change or the user's Stop.
+ */
+function planFleet(states,configs,blocked){
+  const ids=Object.keys(states).sort((a,b)=>a==='A'?-1:b==='A'?1:0);if(!ids.length)throw new Error('Place at least one robot on the board.');
+  for(const id of ids){const c=configs[id];validateMission(c.start,c.target||c.start);if(blocked.has(key(states[id].pose)))throw new Error(`${id} occupies an obstacle. Reposition it.`);}
+  const stationary=stationaryRobotTiles(states),globalMap=routingMap(blocked,stationary,null);
+  // Duplicate starts are not adjacency: two robots cannot own the SAME tile.
+  for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++)if(sameCell(states[ids[i]].pose,states[ids[j]].pose))throw new Error(`${ids[i]} and ${ids[j]} need distinct tiles.`);
+  const schedules={},waiting={},blockedRobots={},paths={};let visited=0;
+  for(const id of ids){
+    const current=states[id],config=configs[id];if(isParked(current)){schedules[id]=[];continue;}
+    const goal=current.leg==='Outbound'?config.target:config.start,effectiveMap=routingMap(blocked,stationary,id);
+    const individual=aStar(current.pose,goal,effectiveMap,current.leg==='Return'?config.start.heading:null);
+    paths[id]=individual;
+    if(!individual){schedules[id]=[];blockedRobots[id]=`${current.leg==='Return'?'Start':'Target'} blocked by the shared obstacle map`;continue;}
+    const reservations=ids.filter(other=>other!==id).map(other=>{const commands=schedules[other]||[];return {id:other,commands,states:scheduleStates(states[other],commands)};});
+    const route=spaceTimeRoute(id,current,config,effectiveMap,reservations);visited+=route.visited;
+    if(route.commands)schedules[id]=route.commands;else{schedules[id]=[];if(id==='A')blockedRobots[id]='Blocked · no route around occupied tiles';else waiting[id]='Auto-Wait · holding this tile until traffic clears';}
+  }
+  const length=Math.max(0,...ids.map(id=>schedules[id].length)),frames=[],cursors=Object.fromEntries(ids.map(id=>[id,cloneState(states[id])]));
+  for(let t=0;t<length;t++){
+    const frame={};for(const id of ids){frame[id]=schedules[id][t]||waitingAt(cursors[id],id,blockedRobots[id]||waiting[id],!!blockedRobots[id]);}
+    // Defensive fail-closed result, not a schedule exception. The search checks
+    // these same reservations; this branch is only for an inconsistent plan.
+    if(!frameIsSafe(cursors,frame)){
+      for(const id of ids){schedules[id]=[];if(!isParked(states[id])){if(id==='A')blockedRobots[id]='Blocked · occupied route';else waiting[id]='Auto-Wait · holding this tile until traffic clears';}}
+      frames.length=0;break;
+    }
+    frames.push(frame);for(const id of ids)cursors[id]=advanceState(cursors[id],frame[id]);
+  }
+  return {frames,schedules,waiting,blockedRobots,paths,stationary,globalMap,visited,yields:frames.reduce((n,f)=>n+ids.filter(id=>f[id].kind==='yield').length,0),idle:!frames.length};
+}
+
+function fleetLightState(mode,shared=false){
+  const rgb=mode==='yield'?FLEET_COLORS.yield.rgb:mode==='error'?FLEET_COLORS.error.rgb:mode==='off'?FLEET_COLORS.off.rgb:FLEET_COLORS.drive.rgb;
+  return {left:{rgb,blink:mode==='emergency'||mode==='error'||mode==='left'||shared&&mode==='right'},right:{rgb,blink:mode==='emergency'||mode==='error'||mode==='right'||shared&&mode==='left'}};
+}
+/* Each robot has its own RootBLE: independent pending reply map, sequence IDs,
+ * write queue, notification subscription and GATT server. A shared controller
+ * owns only map/traffic state, never a transport's packet IDs or pose replies.
+ */
+class FleetController{
+  constructor(configs,blocked,adapters,hooks={}){
+    this.ids=Object.keys(configs);this.idle=false;this.wakeWaiter=null;this.origins={};this.poseChecks=[];
+    this.configs=configs;this.blocked=blocked;this.adapters=adapters;this.hooks=hooks;
+    this.states=Object.fromEntries(this.ids.map(id=>[id,{pose:{...configs[id].start},leg:configs[id].target?'Outbound':'Parked'}]));
+    this.controller=new AbortController();this.active={};this.completed=false;this.recovering=false;this.contact=false;this.frames=0;this.failure=null;
+  }
+  emit(name,...args){this.hooks[name]?.(...args);}
+  status(id,text){this.emit('status',id,text);}
+  async light(id,mode,signal){
+    // Belt-and-braces invariant: A never receives a traffic-yield light cue.
+    // The required orange flash inside celebrate() is a separate success cue.
+    if(id==='A'&&mode==='yield')mode='error';
+    await this.adapters[id].setSafetyLight(mode,signal);this.emit('light',id,{mode});
+  }
+  fail(message){
+    if(this.controller.signal.aborted)return;this.failure=message;this.controller.abort();
+    // Abort all queues synchronously before scheduling the two motor stops.
+    this.stopping=Promise.allSettled(this.ids.map(id=>this.adapters[id].stop()));
+  }
+  stop(){this.userStopped=true;this.fail('Fleet stopped. Reposition the deployed robots before running again.');}
+  touch(id){
+    if(this.emergency||this.completed||this.controller.signal.aborted)return;
+    // Emergency has precedence over bumper recovery, traffic, and completion.
+    // Abort EVERY in-flight action before a late reply can commit a grid tile.
+    this.emergency=true;this.failure=`${id}: top touch pad pressed. Emergency pause latched.`;
+    this.controller.abort();for(const entry of Object.values(this.active))entry.child.abort();
+    this.stopping=Promise.allSettled(this.ids.map(async name=>{
+      await this.adapters[name].emergencyStop();this.emit('light',name,{mode:'emergency'});
+    }));
+    for(const name of this.ids)this.status(name,'EMERGENCY PAUSE · touch stop');
+    this.emit('emergency',id);
+    // No rollback, automatic restart, or assumption that a partial tile finished.
+    // Manual reset requires physical repositioning at the configured starts.
+  }
+  bump(id){
+    if(this.controller.signal.aborted)return;
+    if(this.idle){this.fail(`${id}: contact while stationary. Check and reposition the fleet.`);return;}
+    const action=this.active[id];
+    if(this.recovering||!action||!action.dispatched||action.command.kind!=='move'||action.command.cm<=0){this.fail(`${id}: contact outside a forward step. Fleet stopped; reposition the deployed robots.`);return;}
+    if(action.bump)return;
+    // Mark the contact before aborting so late completion replies cannot commit.
+    action.bump=true;this.contact=true;
+    for(const entry of Object.values(this.active))entry.child.abort();
+    this.halting=Promise.allSettled(this.ids.map(name=>this.adapters[name].haltMotors()));
+    for(const name of this.ids)this.status(name,`Fleet braking · ${id} bump detected`);
+    this.emit('bump',id,ahead(action.from));
+  }
+  async celebrate(id,signal){
+    // Three explicit short flashes: YELLOW #FFFF00 -> ORANGE #FFA500 -> GREEN #00FF00.
+    // These work on stock firmware because both sides have the same color.
+    for(const color of [FLEET_COLORS.error,FLEET_COLORS.yield,FLEET_COLORS.success]){
+      await this.adapters[id].execute({kind:'lights',mode:1,rgb:color.rgb},signal);this.emit('light',id,{rgb:color.rgb});await delay(150,signal);
+      await this.adapters[id].execute({kind:'lights',mode:0,rgb:[0,0,0]},signal);this.emit('light',id,{mode:'off'});await delay(50,signal);
+    }
+    await this.adapters[id].execute({kind:'note',hz:880,seconds:.15},signal);
+  }
+  async perform(id,command){
+    const signal=this.controller.signal,child=new AbortController(),cancel=()=>child.abort();signal.addEventListener('abort',cancel,{once:true});
+    const state=this.states[id],entry={from:{...state.pose},command,child,before:null,bump:false,finished:false};this.active[id]=entry;
+    try{
+      checkAbort(signal);
+      if(command.kind==='move'||command.kind==='turn')entry.before=await this.adapters[id].readPose(child.signal);
+      checkAbort(child.signal);
+      if(command.kind==='move'||command.kind==='turn'){
+        await this.light(id,safetyMode(command),child.signal);checkAbort(child.signal);
+        this.status(id,command.kind==='move'?`${state.leg} · driving`:command.degrees<0?'Turning left':'Turning right');
+        this.emit('motion',id,command,entry.from);
+        entry.dispatched=true;this.emit('availability');
+        const result=await this.adapters[id].execute(command,child.signal);checkAbort(child.signal);
+        const wire=result?.wirePose||await this.adapters[id].readPose(child.signal);
+        if(command.kind==='move')validateStep(entry.before,wire,command.cm);else validateTurn(entry.before,wire,command.degrees);
+        // Also bound accumulated encoder-frame drift, not just each isolated step.
+        this.validateAbsolute(id,wire,command.pose);
+        await this.light(id,'drive',child.signal);
+      }else if(['yield','hold','blocked'].includes(command.kind)){
+        await this.adapters[id].haltMotors();await this.light(id,command.kind==='yield'?'yield':'error',child.signal);
+        this.status(id,command.reason||(command.kind==='yield'&&id!=='A'?'Auto-Wait · priority traffic':'Blocked · occupied route'));
+      }else if(command.kind==='park'){
+        await this.light(id,'off',child.signal);this.status(id,state.leg==='Parked'?'Parked · no target':'Complete · parked');
+      }else{
+        this.status(id,state.leg==='Outbound'?'Target reached · success':'Home · success');await this.celebrate(id,child.signal);
+      }
+      checkAbort(child.signal);this.states[id]=advanceState(state,command);entry.finished=true;this.emit('pose',id,this.states[id]);
+      if(command.kind==='celebrate'&&command.nextLeg==='Return')this.status(id,'Recalculating optimal return');
+    }catch(error){if(!this.contact||this.controller.signal.aborted){if(error.name!=='AbortError')this.fail(`${id}: ${error.message}`);throw error;}}
+    finally{signal.removeEventListener('abort',cancel);}
+  }
+  validateAbsolute(id,wire,pose){
+    const start=this.configs[id].start,origin=this.origins[id];
+    if(!origin)throw new Error('Missing measured start pose. Reconnect and reposition the robot.');
+    const dx=(pose.x-start.x)*GRID.tileWidthCm*10,dy=(pose.y-start.y)*GRID.tileHeightCm*10;
+    // Rotate board displacement into THIS robot's measured reset frame.
+    // Compass headings are clockwise; wire yaw is counterclockwise. Never
+    // rebase after a move: doing so would conceal genuine accumulated drift.
+    const h=(start.heading+origin.yaw-90)*Math.PI/180,cos=Math.cos(h),sin=Math.sin(h);
+    const expected={x:origin.x+dx*cos-dy*sin,y:origin.y+dx*sin+dy*cos,yaw:((origin.yaw-(pose.heading-start.heading))%360+360)%360};
+    const ex=wire.x-expected.x,ey=wire.y-expected.y;
+    const error={x:ex*cos+ey*sin,y:-ex*sin+ey*cos,yaw:angleDifference(wire.yaw,expected.yaw)};
+    // A quarter-tile envelope per BOARD axis, capped at 5 cm, replaces the
+    // inconsistent 1 cm radial cutoff (a single step accepts up to 2 cm).
+    // This is own-robot odometry, never inter-robot proximity. Bounds do not
+    // grow with route length; large drift still stops before a tile commit.
+    const limits={x:Math.min(50,GRID.tileWidthCm*2.5),y:Math.min(50,GRID.tileHeightCm*2.5),yaw:10};
+    const valid=[wire.x,wire.y,wire.yaw].every(Number.isFinite)&&Math.abs(error.x)<=limits.x&&Math.abs(error.y)<=limits.y&&error.yaw<=limits.yaw;
+    const record={robot:id,step:this.frames+1,tile:{...pose},origin:{...origin},expected,reported:{...wire},error,limits,valid};
+    this.poseChecks.push(record);if(this.poseChecks.length>200)this.poseChecks.shift();this.emit('odometry',record);
+    if(!valid)throw new Error(`Pose outside the tile tolerance at (${pose.x}, ${pose.y}): X ${(Math.abs(error.x)/10).toFixed(1)} cm / ${(limits.x/10).toFixed(1)} cm, Y ${(Math.abs(error.y)/10).toFixed(1)} cm / ${(limits.y/10).toFixed(1)} cm, heading ${error.yaw.toFixed(1)}° / ${limits.yaw}°. Reposition the deployed robots. Copy movement diagnostics for investigation.`);
+  }
+  async recover(){
+    this.recovering=true;const signal=this.controller.signal;
+    const halted=await this.halting;if(halted.some(r=>r.status==='rejected'))throw new Error('A robot could not confirm motor halt.');
+    // All endpoint tiles remain reserved through rollback. Recover serially
+    // while every other robot stays inside its disjoint pair of reserved tiles.
+    for(const id of this.ids){
+      const entry=this.active[id];if(!entry)continue;
+      if(entry.bump){const obstacle=ahead(entry.from);if(!inside(obstacle))throw new Error('Bump at board boundary. Reposition the fleet.');
+        // A known robot is never silently reclassified as a permanent obstacle.
+        const occupied=this.ids.some(other=>other!==id&&sameCell(obstacle,this.states[other].pose));
+        if(occupied)throw new Error('Unexpected robot contact. Reposition the fleet.');
+        this.blocked.add(key(obstacle));this.emit('obstacle',id,obstacle);
+      }
+      if(entry.finished||!['move','turn'].includes(entry.command.kind))continue;
+      if(!entry.before)continue; // Cancellation occurred before a motor dispatch.
+      const adapter=this.adapters[id],stopped=await (adapter.readStoppedPose?adapter.readStoppedPose(signal):adapter.readPose(signal));
+      if(entry.command.kind==='turn'){
+        // Recover the partial signed yaw, rather than guessing a completed turn.
+        const ccw=((stopped.yaw-entry.before.yaw+540)%360)-180;
+        if(Math.hypot(stopped.x-entry.before.x,stopped.y-entry.before.y)>10||Math.abs(ccw)>105)throw new Error('Cannot locate a stopped turn. Reposition the fleet.');
+        if(Math.abs(ccw)>.5){await this.light(id,ccw>0?'right':'left',signal);await adapter.execute({kind:'turn',degrees:ccw,pose:entry.from,phase:'Recovery'},signal);}
+      }else{
+        const cm=recoveryDistance(entry.before,stopped,entry.command.cm);
+        if(cm>.1){await this.light(id,'drive',signal);this.status(id,'Recovering confirmed tile');await adapter.execute({kind:'move',cm:-cm,pose:entry.from,phase:'Recovery'},signal);}
+      }
+      const recovered=await adapter.readPose(signal);verifyRecovered(entry.before,recovered);this.validateAbsolute(id,recovered,entry.from);
+      await adapter.waitForRelease(signal);this.emit('pose',id,this.states[id]);
+    }
+    this.active={};this.contact=false;this.recovering=false;this.emit('replan');
+  }
+  wake(){this.wakeRevision=(this.wakeRevision||0)+1;this.wakeWaiter?.();}
+  async waitForChange(revision){
+    // No repeated motor/LED writes, busy loop, or fabricated progress while idle.
+    const signal=this.controller.signal;checkAbort(signal);if((this.wakeRevision||0)!==revision)return;
+    await new Promise((resolve,reject)=>{
+      const cleanup=()=>{signal.removeEventListener('abort',abort);this.wakeWaiter=null;};
+      const abort=()=>{cleanup();reject(abortError());};
+      this.wakeWaiter=()=>{cleanup();resolve();};signal.addEventListener('abort',abort,{once:true});
+    });
+  }
+  async makePlan(){
+    // Browser runs the CPU search in a local Blob Worker. BLE touch/bump
+    // notifications stay responsive even on larger, congested custom maps.
+    return this.hooks.planner?this.hooks.planner(this.states,this.configs,this.blocked,this.controller.signal):planFleet(this.states,this.configs,this.blocked);
+  }
+  async run(){
+    const signal=this.controller.signal;
+    try{
+      let plan=await this.makePlan();checkAbort(signal);this.emit('plan',plan,this.states);
+      await Promise.all(this.ids.map(async id=>{try{
+        const origin=await this.adapters[id].begin(signal)||await this.adapters[id].readPose(signal);checkAbort(signal);
+        if(![origin.x,origin.y,origin.yaw].every(Number.isFinite))throw new Error('Invalid measured start pose.');
+        this.origins[id]={...origin};
+      }catch(e){this.fail(`${id}: ${e.message}`);throw e;}}));
+      while(this.ids.some(id=>!isParked(this.states[id]))){
+        checkAbort(signal);plan=await this.makePlan();checkAbort(signal);this.emit('plan',plan,this.states);
+        if(plan.idle){
+          this.active={};this.contact=false;
+          await Promise.all(this.ids.map(id=>this.perform(id,waitingAt(this.states[id],id,plan.blockedRobots[id]||plan.waiting[id],!!plan.blockedRobots[id]))));
+          this.active={};this.idle=true;const revision=this.wakeRevision||0;this.emit('idle',true,plan);
+          await this.waitForChange(revision);this.idle=false;this.emit('idle',false);continue;
+        }
+        for(const frame of plan.frames){
+          checkAbort(signal);this.active={};this.contact=false;
+          // Recheck endpoint ownership immediately before dispatch. A stale
+          // plan pauses safely and waits for a map change instead of throwing
+          // a schedule error or spinning. A remains yellow, never Auto-Wait.
+          if(!frameIsSafe(this.states,frame)){
+            await Promise.all(this.ids.map(id=>this.perform(id,waitingAt(this.states[id],id))));
+            this.active={};this.idle=true;const revision=this.wakeRevision||0;this.emit('idle',true,plan);
+            await this.waitForChange(revision);this.idle=false;this.emit('idle',false);break;
+          }
+          const results=await Promise.allSettled(this.ids.map(id=>this.perform(id,frame[id])));checkAbort(signal);
+          if(this.contact){await this.recover();break;}
+          const failure=results.find(r=>r.status==='rejected');if(failure)throw failure.reason;
+          this.frames++;this.emit('progress',this.frames);
+          // Target arrival starts an INDEPENDENT return A*. Final arrival makes
+          // that robot static at its live tile immediately. Both events rebuild
+          // the shared occupancy layer and every remaining route before dispatch.
+          if(this.ids.some(id=>frame[id].kind==='celebrate'))break;
+        }
+      }
+      await Promise.all(this.ids.map(id=>this.light(id,'off',signal)));this.completed=true;
+      for(const id of this.ids)this.status(id,this.states[id].leg==='Parked'?'Parked · no target':'Complete · start heading restored');return this.states;
+    }catch(error){
+      if(!this.controller.signal.aborted)this.fail(error.message);await this.stopping;
+      if(this.emergency){
+        const failures=(await this.stopping).filter(r=>r.status==='rejected');
+        if(failures.length)this.failure+=' A disconnected or unresponsive robot could not confirm stop.';
+        // Keep firmware flashing red; a release event cannot clear the latch.
+        for(const id of this.ids){this.emit('light',id,{mode:'emergency'});this.status(id,'EMERGENCY PAUSE · manual reset required');}
+        throw new Error(this.failure);
+      }
+      await Promise.allSettled(this.ids.map(async id=>{await this.adapters[id].setSafetyLight(this.userStopped?'off':'error');this.emit('light',id,{mode:this.userStopped?'off':'error'});this.status(id,'Stopped · '+(this.failure||error.message));}));
+      throw new Error(this.failure||error.message);
+    }finally{this.idle=false;this.wakeWaiter=null;this.emit('idle',false);}
+  }
+}
+</script>
+<script id="ui">// Keep the editor's isolated preview separate from physical robot pairing.
+let isolatedPreview=false,appUiReady=false;
+try{isolatedPreview=window.__ROOT_PREVIEW__===true&&window.parent!==window&&window.origin==='null';}catch(_){}
+function canApplyCustomization(state){return !state.running&&!state.connecting&&!state.emergency&&state.connected===0;}
+
+'use strict';
+const $=id=>document.getElementById(id),ids=[];let nextRobotIndex=0;
+let mode='A',editingRobot='A',placementTool='auto',configs={},blocked=new Set(),hazards=new Set(),learned=new Set(),preview=null,previewError='',runner=null,running=false,physical=false,needsReposition=false;
+let poses={},statuses={},lighting={},animationAngles={},paint=null,connecting=false;
+let emergencyLatched=false,environmentBusy=false,previewController=null,previewRevision=0,floorAsset=null;
+try{emergencyLatched=sessionStorage.getItem('root-touch-latch')==='1';}catch(_){}
+const ble={};
+function say(text,error=false){$('live-status').textContent=text;$('status-banner').classList.toggle('error',error);}
+function announce(){say(deployedIds().map(id=>`${id}: ${statuses[id]}`).join(' | '));}
+function cellLabel(p){return p?`(${p.x}, ${p.y})`:'Tap to choose';}
+function headingLabel(p){return p?`${cellLabel(p)} · ${HEADINGS[p.heading/90]}`:'Tap to place';}
+function deployedIds(){return ids.filter(id=>configs[id].start);}
+function deployedConfigs(){return Object.fromEntries(deployedIds().map(id=>[id,configs[id]]));}
+function freshStates(){return Object.fromEntries(deployedIds().map(id=>[id,{pose:{...configs[id].start},leg:configs[id].target?'Outbound':'Parked'}]));}
+function completeSetup(){return ids.some(id=>configs[id].start&&configs[id].target);}
+function at(p){return {left:(p.x+.5)*100/GRID.cols+'%',top:(GRID.rows-.5-p.y)*100/GRID.rows+'%'};}
+function placeElement(el,p){el.hidden=!p;if(p)Object.assign(el.style,at(p));}
+function setRobotPose(id,p,ms=0,degrees=null){
+  if(!p)return;const el=$('robot-'+id),body=$('body-'+id);el.style.transition=ms?`left ${ms}ms linear, top ${ms}ms linear`:'none';placeElement(el,p);
+  if(degrees!==null)animationAngles[id]+=degrees;else animationAngles[id]=p.heading;
+  body.style.transition=ms?`transform ${ms}ms linear`:'none';body.style.transform=`rotate(${animationAngles[id]}deg)`;
+}
+function renderLights(id,cue){
+  lighting[id]=cue;const state=cue.rgb?{left:{rgb:cue.rgb,blink:false},right:{rgb:cue.rgb,blink:false}}:fleetLightState(cue.mode,physical);
+  for(const side of ['left','right']){
+    const c=state[side],color=c.rgb.every(v=>v===0)?'#8a99a6':`rgb(${c.rgb.join(',')})`;
+    for(const prefix of ['lamp','bars']){const el=$(`${prefix}-${id}-${side}`);el.style[prefix==='lamp'?'background':'stroke']=color;el.classList.toggle('blink',c.blink);el.setAttribute('aria-label',`${id} ${side} ${cue.mode||'success'}${c.blink?' blinking':''}`);}
+  }
+  $('robot-'+id).classList.toggle('yielding',cue.mode==='yield');
+}
+function pathPoints(points){return points.map(p=>`${p.x*100+50},${(GRID.rows-.5-p.y)*100}`).join(' ');}
+function showPaths(plan,states){
+  for(const id of ids){
+    const paths={Outbound:[],Return:[]};
+    if(states[id]){let state=cloneState(states[id]);if(!isParked(state))paths[state.leg].push({...state.pose});
+      for(const frame of plan.frames){const c=frame[id];if(c.kind==='move')paths[state.leg]?.push({...c.pose});
+        if(c.nextLeg==='Return'&&state.leg!=='Return')paths.Return.push({...c.pose});state=advanceState(state,c);}
+      if(plan.schedules[id]?.length===0&&plan.paths[id])paths[states[id].leg]=plan.paths[id].points;
+    }
+    for(const leg of ['out','back']){$('path-'+id+'-'+leg).setAttribute('points',pathPoints(paths[leg==='out'?'Outbound':'Return']));$('path-'+id+'-'+leg).classList.toggle('waiting-route',!!plan.waiting[id]);}
+  }
+}
+function renderTileOccupancy(states=running&&runner?runner.states:freshStates()){
+  const stationary=stationaryRobotTiles(states);
+  for(const tile of $('tiles').children){const p={x:+tile.dataset.x,y:+tile.dataset.y},k=key(p);tile.classList.toggle('blocked',blocked.has(k));tile.classList.toggle('hazard',hazards.has(k));tile.classList.toggle('learned',learned.has(k));
+    const owner=stationary.get(k);tile.classList.toggle('robot-blocked',!!owner);
+    const labels=[];for(const id of ids){if(configs[id].start&&sameCell(p,configs[id].start))labels.push(id+' START');if(configs[id].target&&sameCell(p,configs[id].target))labels.push(id+' TARGET');}
+    tile.querySelector('.mark').textContent=hazards.has(k)?'HAZARD':blocked.has(k)?learned.has(k)?'DETECTED':'WALL':owner?`${owner} PARKED`:labels.join(' · ');
+    tile.setAttribute('aria-label',`Tile ${p.x},${p.y}${hazards.has(k)?' hazard prohibited':blocked.has(k)?' wall blocked':''}${owner?' parked robot '+owner:''}${labels.length?' '+labels.join(' '):''}`);tile.disabled=running||emergencyLatched||environmentBusy;
+  }
+}
+function renderGrid(){
+  renderTileOccupancy();
+  for(const id of ids){placeElement($('target-'+id),configs[id].target);$('start-'+id).textContent=headingLabel(configs[id].start);$('target-state-'+id).textContent=configs[id].target?cellLabel(configs[id].target):configs[id].start?'Parked · tap a target':'Not placed';
+    $('card-'+id).classList.toggle('bench',!configs[id].start);$('clear-'+id).disabled=running||!configs[id].start;
+    if(!running){poses[id]=configs[id].start?{...configs[id].start}:null;if(poses[id])setRobotPose(id,poses[id]);else $('robot-'+id).hidden=true;}}
+}
+function renderControls(){
+  const placed=deployedIds(),connected=ids.filter(id=>ble[id]?.connected).length;
+  $('connection-count').textContent=`${connected} CONNECTED / ${ids.length} VIRTUAL`;$('fleet-dot').classList.toggle('ready',placed.length>0&&placed.every(id=>ble[id]?.connected));
+  $('fleet-count').textContent=`${ids.length} virtual · ${placed.length} on board · ${ids.length-placed.length} on bench`;
+  $('simulate').disabled=running||connecting||emergencyLatched||environmentBusy||!preview;$('go').disabled=isolatedPreview||running||connecting||emergencyLatched||environmentBusy||!preview||!placed.every(id=>ble[id]?.connected)||needsReposition;$('stop').disabled=!running;
+  for(const id of ids){$('connect-'+id).disabled=isolatedPreview||running||connecting||emergencyLatched||environmentBusy;$('connect-'+id).textContent=ble[id]?.connected?`Disconnect Robot ${id}`:`Connect Robot ${id}`;
+    $('bump-'+id).disabled=!running||physical||!runner?.active[id]?.dispatched||runner.active[id].finished||runner.active[id].command.kind!=='move'||runner.contact;
+    $('remove-'+id).disabled=running||connecting||emergencyLatched||environmentBusy||id==='A';$('clear-'+id).disabled=running||emergencyLatched||environmentBusy||!configs[id].start;
+  }
+  for(const el of document.querySelectorAll('#setup-modes button,#block-palette button,#reset,#clear-obstacles,#example,#add-robot'))el.disabled=running||connecting||emergencyLatched||environmentBusy;
+  $('export').disabled=running||!completeSetup();$('reposition').hidden=!needsReposition||running||emergencyLatched;$('test-row').hidden=!running||physical;
+  $('recheck').hidden=!running||!runner?.idle;
+  $('emergency-panel').hidden=!emergencyLatched;$('reset-emergency').disabled=running||environmentBusy;
+  for(const id of ids)$('touch-'+id).disabled=!running||physical||emergencyLatched;
+  updateEnvironmentControls();
+  if(appUiReady)updateDeveloperControls();
+}
+function setMode(next){
+  mode=next;if(next==='draw')placementTool='wall';else{editingRobot=next;placementTool='auto';}renderPlacementTool();
+}
+function renderPlacementTool(){
+  $('board').dataset.mode=mode;
+  for(const button of document.querySelectorAll('#setup-modes button'))button.setAttribute('aria-pressed',button.dataset.mode===mode);
+  for(const button of document.querySelectorAll('#block-palette button'))button.setAttribute('aria-pressed',button.dataset.tool===placementTool);
+  const help={wall:'<strong>Wall block.</strong> Drag to place solid obstacles. Floor erases blocks.',floor:'<strong>Open floor.</strong> Drag to erase walls, hazards, or detected obstacles.',hazard:'<strong>Hazard block.</strong> Drag to mark prohibited tiles. Every robot routes around them.',start:`<strong>Robot ${editingRobot} start.</strong> Tap a tile to move the start; tap it again to rotate.`,target:`<strong>Robot ${editingRobot} target.</strong> Tap any clear tile, including its start, to set the target.`,auto:`<strong>Set Robot ${editingRobot}.</strong> First tap places its start. Tap start again to rotate; tap another tile for its target.`};
+  $('board-help').innerHTML=help[placementTool];
+}
+for(const button of document.querySelectorAll('#block-palette button'))button.addEventListener('click',()=>{
+  placementTool=button.dataset.tool;mode=['wall','floor','hazard'].includes(placementTool)?'draw':editingRobot;renderPlacementTool();
+});
+async function refresh(){
+  const revision=++previewRevision;previewController?.abort();previewController=new AbortController();
+  if(!running){$('run-mode').textContent=emergencyLatched?'EMERGENCY PAUSE':'LIVE PREVIEW';$('tick').textContent='STANDBY';}
+  renderGrid();preview=null;previewError='';
+  for(const path of document.querySelectorAll('.route'))path.setAttribute('points','');
+  renderControls();
+  if(completeSetup()&&!emergencyLatched){$('plan-title').textContent='Calculating routes…';try{
+    const states=freshStates(),result=await planFleetAsync(states,deployedConfigs(),blocked,previewController.signal);
+    if(revision!==previewRevision)return;preview=result;showPaths(preview,states);
+  }catch(e){if(revision!==previewRevision||e.name==='AbortError')return;previewError=e.message;}}
+  if(emergencyLatched){
+    $('plan-title').textContent='Touch stop latched';$('plan-copy').textContent='Restore starts, release the pads, then reset manually.';
+    for(const id of ids){statuses[id]='EMERGENCY PAUSE · manual reset required';$('status-'+id).textContent=statuses[id];renderLights(id,{mode:'emergency'});}
+    renderControls();return;
+  }
+  $('traffic').classList.toggle('error',!!previewError||!!preview?.blockedRobots.A);$('plan-title').textContent=preview?(preview.idle?'Routes blocked or waiting':'Fleet routes ready'):previewError?'Check robot placement':'Configure a mission';
+  if(preview){const waiters=Object.keys(preview.waiting),errors=Object.keys(preview.blockedRobots);
+    $('plan-copy').textContent=preview.idle?'No route is currently open. Parked robots are map obstacles; A never yields.':`${deployedIds().length} on board · ${preview.frames.length} planned steps · ${preview.yields} yield steps. Priority A, then creation order.`;
+    if(waiters.length)$('plan-copy').textContent+=` Auto-Wait: ${waiters.join(', ')}.`;
+    if(errors.length)$('plan-copy').textContent+=` Map blocked: ${errors.join(', ')}.`;
+  }else $('plan-copy').textContent=previewError||'Select a robot, tap its start, then its target. Unplaced robots stay on the bench.';
+  for(const id of ids){statuses[id]=preview?.blockedRobots[id]?'Blocked by obstacle map':preview?.waiting[id]||(configs[id].target?'Ready':configs[id].start?'Parked · no target':'On bench · tap to place');$('status-'+id).textContent=statuses[id];renderLights(id,{mode:preview?.blockedRobots[id]||preview?.waiting[id]&&id==='A'?'error':preview?.waiting[id]?'yield':'off'});}
+  renderControls();
+}
+function tap(p){
+  if(running||emergencyLatched||environmentBusy)return;if(mode==='draw'){paintCell(p,placementTool);return;}
+  if(blocked.has(key(p))){say('Erase this obstacle before placing a robot.',true);return;}
+  const c=configs[mode];
+  if(placementTool==='target'){if(!c.start){say('Place this robot’s start first.',true);return;}c.target={...p};}
+  else if(placementTool==='start'||!c.start){if(ids.some(id=>id!==mode&&configs[id].start&&sameCell(configs[id].start,p))){say('Each robot needs its own start tile.',true);return;}c.start={...p,heading:c.start&&sameCell(c.start,p)?(c.start.heading+90)%360:c.start?.heading||0};}
+  else if(sameCell(c.start,p))c.start.heading=(c.start.heading+90)%360;
+  else c.target={...p};
+  statuses[mode]='Ready';$('status-'+mode).textContent='Ready';renderLights(mode,{mode:'off'});say(`Robot ${mode} mission updated.`);refresh();
+}
+function paintCell(p,type){
+  if(type!=='floor'&&ids.some(id=>[configs[id].start,configs[id].target].some(q=>q&&sameCell(q,p))))return;
+  const k=key(p);learned.delete(k);hazards.delete(k);
+  if(type==='floor')blocked.delete(k);else{blocked.add(k);if(type==='hazard')hazards.add(k);}refresh();
+}
+function buildGrid(){
+  $('tiles').replaceChildren();$('x-axis').replaceChildren();$('y-axis').replaceChildren();
+  $('board').style.setProperty('--cols',GRID.cols);$('board').style.setProperty('--rows',GRID.rows);
+  $('board').style.aspectRatio=String(GRID.cols*GRID.tileWidthCm/(GRID.rows*GRID.tileHeightCm));
+  $('board').style.setProperty('--robot-size',Math.min(60/GRID.cols,60*GRID.tileHeightCm/(GRID.cols*GRID.tileWidthCm))+'%');
+  $('board').style.setProperty('--target-size',40/GRID.cols+'%');$('board').classList.toggle('dense',GRID.cols>12||GRID.rows>12);
+  $('paths').setAttribute('viewBox',`0 0 ${GRID.cols*100} ${GRID.rows*100}`);
+  for(let y=GRID.rows-1;y>=0;y--){const label=document.createElement('span');label.textContent=y;$('y-axis').append(label);
+    for(let x=0;x<GRID.cols;x++){const button=document.createElement('button');button.className='tile';button.type='button';button.dataset.x=x;button.dataset.y=y;button.innerHTML=`<span class="coord">${x},${y}</span><span class="mark"></span>`;button.addEventListener('click',e=>{if(e.detail===0||mode!=='draw')tap({x,y});});$('tiles').append(button);}}
+  for(let x=0;x<GRID.cols;x++){const label=document.createElement('span');label.textContent=x;$('x-axis').append(label);}
+  $('tiles').setAttribute('aria-label',`${GRID.cols} by ${GRID.rows} floor grid`);
+  $('board-spec').textContent=`${GRID.cols} × ${GRID.rows} GRID\n${+(GRID.cols*GRID.tileWidthCm).toFixed(1)} × ${+(GRID.rows*GRID.tileHeightCm).toFixed(1)} CM / ${GRID.tileWidthCm} × ${GRID.tileHeightCm} CM TILES`;
+}
+$('board').addEventListener('pointerdown',e=>{if(running||emergencyLatched||environmentBusy||mode!=='draw')return;const tile=e.target.closest('.tile');if(!tile)return;e.preventDefault();const p={x:+tile.dataset.x,y:+tile.dataset.y};paint={id:e.pointerId,type:placementTool,last:key(p)};$('board').setPointerCapture(e.pointerId);paintCell(p,paint.type);});
+$('board').addEventListener('pointermove',e=>{if(!paint||e.pointerId!==paint.id)return;const tile=document.elementFromPoint(e.clientX,e.clientY)?.closest('.tile');if(!tile)return;const p={x:+tile.dataset.x,y:+tile.dataset.y};if(key(p)!==paint.last){paint.last=key(p);paintCell(p,paint.type);}});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])$('board').addEventListener(event,()=>paint=null);
+$('draw-mode').addEventListener('click',()=>setMode('draw'));
+function addRobot(select=true){
+  const id=robotLetter(nextRobotIndex++),index=ids.length;ids.push(id);configs[id]={start:null,target:null};statuses[id]='On bench';animationAngles[id]=0;
+  const color=['#2473d5','#8d55c3','#168d83','#b57522','#d55772','#6376bd'][index%6];
+  const modeButton=document.createElement('button');modeButton.dataset.mode=id;modeButton.style.setProperty('--robot-color',color);modeButton.textContent=`Robot ${id}${id==='A'?' · Priority':''}`;modeButton.setAttribute('aria-pressed','false');modeButton.addEventListener('click',()=>setMode(id));$('setup-modes').insertBefore(modeButton,$('draw-mode'));
+  const card=document.createElement('div');card.id='card-'+id;card.className='robot-card';card.style.setProperty('--robot-color',color);
+  card.innerHTML=`<div class="card-top"><div class="card-title"><span>●</span> Robot ${id}<span class="role">${id==='A'?'Priority':'Yields'}</span></div><button class="text-button remove-robot" id="remove-${id}" aria-label="Remove Robot ${id}">×</button></div><span class="connection" id="connection-${id}">VIRTUAL · NOT CONNECTED</span><div class="state-row"><span>Start</span><strong id="start-${id}"></strong></div><div class="state-row"><span>Target</span><strong id="target-state-${id}"></strong></div><div class="robot-status" id="status-${id}">On bench · tap to place</div><div class="card-bottom"><button class="text-button" id="edit-${id}">Edit mission</button><button class="text-button" id="clear-${id}">Move to bench</button><div class="lamps"><span>L</span><i class="lamp" id="lamp-${id}-left"></i><i class="lamp" id="lamp-${id}-right"></i><span>R</span></div></div><button class="btn connect-robot" id="connect-${id}">Connect Robot ${id}</button>`;$('robot-cards').append(card);
+  const target=document.createElement('div');target.id='target-'+id;target.className='target';target.style.setProperty('--robot-color',color);target.hidden=true;target.innerHTML='<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="12" fill="white" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="20" r="4" fill="currentColor"/></svg>';$('board').append(target);
+  const robot=document.createElement('div');robot.id='robot-'+id;robot.className='robot';robot.style.setProperty('--robot-color',color);robot.hidden=true;
+  robot.innerHTML=`<div class="robot-body" id="body-${id}"><svg viewBox="0 0 60 60"><path d="M30 3L52 16v28L30 57 8 44V16z" fill="white" stroke="currentColor" stroke-width="3"/><path d="M30 12l9 13h-6v17h-6V25h-6z" fill="currentColor"/><g class="robot-led" id="bars-${id}-left"><path d="M15 19l6 5m-6 17l6-5"/></g><g class="robot-led" id="bars-${id}-right"><path d="M45 19l-6 5m6 17l-6-5"/></g></svg></div><span class="robot-letter">${id}</span>`;$('board').append(robot);
+  for(const leg of ['out','back']){const path=document.createElementNS('http://www.w3.org/2000/svg','polyline');path.id=`path-${id}-${leg}`;path.setAttribute('class','route'+(leg==='back'?' back':''));path.style.stroke=color;if(leg==='back')path.setAttribute('transform','translate(5 -5)');$('paths').append(path);}
+  const bumpButton=document.createElement('button');bumpButton.id='bump-'+id;bumpButton.className='btn small';bumpButton.textContent=`Test bump ${id}`;$('test-row').append(bumpButton);
+  const touchButton=document.createElement('button');touchButton.id='touch-'+id;touchButton.className='btn small emergency-test';touchButton.textContent=`Test touch ${id}`;touchButton.addEventListener('click',()=>{if(running&&!physical)runner.touch(id);});$('test-row').append(touchButton);
+  const option=document.createElement('option');option.value=id;option.textContent=id;$('export-robot').append(option);
+  ble[id]=new RootBLE((state,name)=>{const el=$('connection-'+id);if(el)el.textContent=state==='connected'?(name||'CONNECTED'):state==='disconnected'?'VIRTUAL · NOT CONNECTED':state.toUpperCase();renderControls();},reason=>{if(running&&physical&&runner.ids.includes(id))runner.fail(`${id}: ${reason}`);},()=>{if(running&&physical&&runner.ids.includes(id))runner.bump(id);},event=>{if(event.pressed&&running&&physical&&runner.ids.includes(id))runner.touch(id);renderControls();});
+  $('connect-'+id).addEventListener('click',async()=>{
+    if(isolatedPreview||running||connecting||emergencyLatched||environmentBusy)return;connecting=true;renderControls();
+    try{if(ble[id].connected)await ble[id].disconnect();else{
+      await ble[id].connect(new Set(ids.filter(other=>other!==id&&ble[other].connected).map(other=>ble[other].device.id)));
+    }}
+    catch(e){say(e.message,true);}finally{connecting=false;renderControls();}
+  });
+  $('edit-'+id).addEventListener('click',()=>{if(!running){setMode(id);$('board').scrollIntoView({block:'center',behavior:'smooth'});}});
+  $('clear-'+id).addEventListener('click',()=>{if(running)return;configs[id]={start:null,target:null};refresh();setMode(id);say(`Robot ${id} moved to the virtual bench. Remove it from the physical board before GO.`);});
+  $('remove-'+id).addEventListener('click',async()=>{if(running||id==='A')return;connecting=true;renderControls();try{if(ble[id].connected)await ble[id].disconnect();const i=ids.indexOf(id);ids.splice(i,1);delete configs[id];delete ble[id];delete statuses[id];
+    for(const prefix of ['card-','robot-','target-','bump-','touch-','path-']){if(prefix==='path-'){for(const leg of ['out','back'])$(prefix+id+'-'+leg).remove();}else $(prefix+id).remove();}modeButton.remove();option.remove();if(editingRobot===id)setMode('A');refresh();say(`Robot ${id} removed. Remove that physical robot from the board too.`);
+  }finally{connecting=false;renderControls();}});
+  bumpButton.addEventListener('click',()=>{if(running&&!physical){runner.bump(id);renderControls();}});
+  refresh();if(select){setMode(id);say(`Robot ${id} added to the virtual bench. Tap a start and target; connect whenever ready.`);}return id;
+}
+$('add-robot').addEventListener('click',()=>addRobot());
+async function startRun(usePhysical){
+  if(running||connecting||usePhysical&&isolatedPreview)return;
+  if(running||connecting||emergencyLatched||environmentBusy||!preview)return;previewController?.abort();physical=usePhysical;running=true;if(usePhysical)needsReposition=true;let completed=false;
+  for(const id of deployedIds())statuses[id]='Starting';$('run-mode').textContent=physical?'BLUETOOTH FLEET':'SIMULATING';$('tick').textContent='STEP 0';
+  const adapters=physical?Object.fromEntries(deployedIds().map(id=>[id,ble[id]])):Object.fromEntries(deployedIds().map(id=>[id,new SimulatorAdapter((command,ms)=>{
+    if(command.kind==='move'||command.kind==='turn'){setRobotPose(id,command.pose,ms,command.kind==='turn'?command.degrees:null);renderControls();}
+  })]));
+  runner=new FleetController(structuredClone(deployedConfigs()),blocked,adapters,{
+    odometry:()=>updateMovementDiagnostics(),
+    planner:planFleetAsync,
+    emergency:id=>latchEmergency(id),
+    availability:()=>renderControls(),
+    status:(id,text)=>{statuses[id]=text;$('status-'+id).textContent=text;announce();},
+    pose:(id,state)=>{poses[id]={...state.pose};setRobotPose(id,state.pose);renderTileOccupancy(runner.states);renderControls();},
+    light:(id,cue)=>renderLights(id,cue),
+    motion:(id,command,from)=>{if(physical){setRobotPose(id,from);$('run-mode').textContent='WAITING FOR ROBOT REPLIES';}renderControls();},
+    obstacle:(id,p)=>{learned.add(key(p));renderGrid();say(`${id}: new obstacle at ${cellLabel(p)}. Cascade reroute for the deployed fleet.`);},
+    bump:()=>{freezeRobots();renderControls();},
+    plan:(plan,states)=>{showPaths(plan,states);renderTileOccupancy(states);$('traffic').classList.toggle('error',!!plan.blockedRobots.A);$('plan-title').textContent=plan.idle?'Routes blocked or waiting':'Tile reservations active';$('plan-copy').textContent=plan.idle?'No open route. Yellow means blocked; orange is for lower-priority traffic waits.':`${plan.frames.length} planned steps · ${plan.yields} yield steps. ${plan.stationary.size} parked tile${plan.stationary.size===1?'':'s'} mapped.`;},
+    idle:(idle,plan)=>{if(idle){$('run-mode').textContent='FLEET PAUSED';announce();}renderControls();},
+    progress:n=>{$('tick').textContent=`STEP ${n}`;renderControls();},
+    replan:()=>say('Shared map updated · recalculating every remaining mission.')
+  });
+  renderGrid();renderControls();updateMovementDiagnostics();
+  try{await runner.run();completed=true;if(usePhysical)needsReposition=false;say('Fleet complete. All deployed robots restored to their start tiles and headings.');}
+  catch(e){say(e.message,true);}
+  finally{updateMovementDiagnostics();running=false;physical=false;
+    if(emergencyLatched){$('run-mode').textContent='EMERGENCY PAUSE';$('plan-title').textContent='Touch stop latched';$('plan-copy').textContent='Partial moves were cancelled. Restore the starts, then reset manually.';renderControls();return;}
+    $('run-mode').textContent=completed?'MISSION COMPLETE':'FLEET STOPPED';for(const tile of $('tiles').children)tile.disabled=false;
+    const revision=++previewRevision;previewController?.abort();previewController=new AbortController();preview=null;renderControls();
+    if(completeSetup())try{const result=await planFleetAsync(freshStates(),deployedConfigs(),blocked,previewController.signal);if(revision!==previewRevision)return;preview=result;}catch(e){if(e.name==='AbortError'||revision!==previewRevision)return;previewError=e.message;}
+    $('plan-title').textContent=completed?'Fleet complete':'Fleet stopped';
+    $('plan-copy').textContent=completed?'All mission start tiles and headings restored. Ready for another mission.':(previewError||'Reposition the deployed robots before physical execution.');
+    $('traffic').classList.toggle('error',!completed);renderControls();}
+}
+$('recheck').addEventListener('click',()=>runner?.wake());
+$('simulate').addEventListener('click',()=>startRun(false));$('go').addEventListener('click',()=>startRun(true));$('stop').addEventListener('click',()=>runner?.stop());
+$('reposition').addEventListener('click',()=>{needsReposition=false;refresh();say('Start positions confirmed. Ready to run.');});
+$('clear-obstacles').addEventListener('click',()=>{blocked.clear();hazards.clear();learned.clear();refresh();say('Shared obstacles cleared.');});
+$('reset').addEventListener('click',()=>{for(const id of ids)configs[id]={start:null,target:null};blocked.clear();hazards.clear();learned.clear();for(const id of ids){renderLights(id,{mode:'off'});$('status-'+id).textContent='Choose a mission';}refresh();say('Choose a start and target for each robot.');});
+function demo(){
+  if(ids.length===1)addRobot(false);
+  for(const id of ids)configs[id]={start:null,target:null};
+  applyEnvironment({cols:4,rows:4,tileWidthCm:16,tileHeightCm:16},false);
+  const a=ids[0],b=ids[1];configs[a]={start:{x:0,y:0,heading:0},target:{x:0,y:3}};configs[b]={start:{x:3,y:2,heading:270},target:{x:0,y:2}};
+  blocked.clear();hazards.clear();learned.clear();refresh();setMode('A');say('Crossing demo loaded. Extra virtual robots stay on the bench.');
+}
+$('example').addEventListener('click',demo);
+function exportCode(){
+  $('python-code').readOnly=false;$('reset-python-code').hidden=false;
+  $('python-edit-note').textContent='Edit the generated Python before copying or downloading. Changing robot or format regenerates it.';
+  const id=$('export-robot').value,c=configs[id];if(!c?.start||!c?.target){$('python-code').value='# Set this robot’s start and target to export a route.';return;}const plan=previewPlan(c.start,c.target,blocked);if(!plan){$('python-code').value='# No route is available on this map.';return;}
+  const completion=p=>[...['error','yield','success'].flatMap(name=>[{kind:'lights',mode:1,rgb:FLEET_COLORS[name].rgb,pose:p,phase:'Success sequence'},{kind:'wait',seconds:.15,pose:p,phase:'Success sequence'},{kind:'lights',mode:0,rgb:[0,0,0],pose:p,phase:'Success sequence'},{kind:'wait',seconds:.05,pose:p,phase:'Success sequence'}]),{kind:'note',hz:880,seconds:.15,pose:p,phase:'Success sequence'}];
+  const outbound=aStar(c.start,c.target,blocked),back=aStar(outbound.end,c.start,blocked,c.start.heading);back.commands.forEach(command=>command.phase='Return');
+  plan.commands=[...outbound.commands,...completion(outbound.end),...back.commands,...completion(back.end)];
+  $('python-code').value=`# ROBOT ${id} ONLY. Remove all other robots before running.\n# No fleet yielding, live bump recovery or touch-stop listener in this static export.\n`+pythonFor(plan,$('format').value);$('copy-status').textContent='';
+}
+$('export').addEventListener('click',()=>{exportCode();$('code-drawer').showModal();});$('close-drawer').addEventListener('click',()=>$('code-drawer').close());$('export-robot').addEventListener('change',exportCode);$('format').addEventListener('change',exportCode);$('reset-python-code').addEventListener('click',exportCode);
+$('copy-code').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('python-code').value);$('copy-status').textContent='Copied.';}catch(e){$('python-code').select();$('copy-status').textContent='Select and copy the code from the box.';}});
+$('download-code').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([$('python-code').value],{type:'text/x-python'})),a=document.createElement('a');a.href=url;a.download=`root-${$('export-robot').value.toLowerCase()}-route.py`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&running)runner.fail('Page hidden. Fleet stopped; reposition the deployed robots.');});
+window.addEventListener('pagehide',()=>{if(running)runner.stop();});
+
+/* Custom environment UI. Images, calibration, file parsing, and search all run
+ * locally; no asset is uploaded to a service and there is no backend. */
+let plannerWorkerURL=null,calibrationAsset=null,calibrationKind='floor',calibrationPoints=[];
+function updateMovementDiagnostics(){
+  if(!runner)return;$('movement-diagnostics').hidden=false;
+  $('diagnostics-json').value=JSON.stringify({version:2,mode:physical?'Bluetooth':'Simulation',grid:{...GRID},completed:runner.completed,steps:runner.frames,error:runner.failure,origins:runner.origins,states:runner.states,checks:runner.poseChecks},null,2);
+}
+$('copy-diagnostics').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText($('diagnostics-json').value);$('diagnostics-copy-status').textContent='Copied.';}
+  catch(_){$('diagnostics-json').select();$('diagnostics-copy-status').textContent='Select and copy the diagnostics from the box.';}
+});
+function planFleetAsync(states,missions,obstacles,signal){
+  checkAbort(signal);
+  if(!plannerWorkerURL){
+    const source=$('core').textContent+`\nself.onmessage=event=>{try{const d=event.data;setEnvironment(d.grid);self.postMessage({plan:planFleet(d.states,d.missions,d.obstacles)});}catch(e){self.postMessage({error:e.message});}};`;
+    plannerWorkerURL=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));
+  }
+  return new Promise((resolve,reject)=>{
+    const worker=new Worker(plannerWorkerURL);
+    const cleanup=()=>{worker.terminate();signal?.removeEventListener('abort',abort);};
+    const abort=()=>{cleanup();reject(abortError());};signal?.addEventListener('abort',abort,{once:true});
+    worker.onmessage=event=>{cleanup();event.data.error?reject(new Error(event.data.error)):resolve(event.data.plan);};
+    worker.onerror=()=>{cleanup();reject(new Error('Local route planner failed. Reload the app when robots are stopped.'));};
+    worker.postMessage({states,missions,obstacles,grid:{...GRID}});
+  });
+}
+function freezeRobots(){
+  for(const id of ids){const el=$('robot-'+id),body=$('body-'+id),style=getComputedStyle(el),rotation=getComputedStyle(body).transform;
+    const left=style.left,top=style.top;el.style.transition='none';el.style.left=left;el.style.top=top;body.style.transition='none';body.style.transform=rotation;}
+}
+function latchEmergency(id){
+  emergencyLatched=true;try{sessionStorage.setItem('root-touch-latch','1');}catch(_){}
+  previewController?.abort();freezeRobots();$('status-banner').classList.add('emergency');
+  $('run-mode').textContent='EMERGENCY PAUSE';say(`${id}: top touch detected. Fleet motion cancelled; manual reset required.`,true);
+  for(const name of deployedIds())renderLights(name,{mode:'emergency'});renderControls();
+}
+$('reset-emergency').addEventListener('click',async()=>{
+  if(running||environmentBusy)return;
+  if(ids.some(id=>ble[id].connected&&ble[id].touchState)){say('Release all top touch pads before resetting.',true);return;}
+  environmentBusy=true;renderControls();
+  try{
+    await Promise.all(ids.filter(id=>ble[id].connected).map(id=>ble[id].setSafetyLight('off')));
+    emergencyLatched=false;needsReposition=false;try{sessionStorage.removeItem('root-touch-latch');}catch(_){}
+    $('status-banner').classList.remove('emergency');say('Touch stop reset. Starts confirmed. Choose Simulate or GO for a new run.');
+  }catch(e){say('Touch stop stays latched: '+e.message,true);}
+  finally{environmentBusy=false;await refresh();}
+});
+function updateEnvironmentControls(){
+  const locked=running||connecting||emergencyLatched||environmentBusy;
+  for(const el of document.querySelectorAll('.environment input,.environment button'))el.disabled=locked;
+  $('calibrate-image').disabled=locked||!floorAsset;$('remove-image').disabled=locked||!floorAsset;
+}
+function readEnvironmentInputs(){return validateEnvironment({cols:Number($('grid-cols').value),rows:Number($('grid-rows').value),tileWidthCm:Number($('tile-width').value),tileHeightCm:Number($('tile-height').value)});}
+function syncEnvironmentInputs(){for(const [field,prop] of [['grid-cols','cols'],['grid-rows','rows'],['tile-width','tileWidthCm'],['tile-height','tileHeightCm']])$(field).value=GRID[prop];}
+function applyEnvironment(value,replan=true){
+  setEnvironment(value);syncEnvironmentInputs();
+  for(const tile of [...blocked]){const [x,y]=tile.split(',').map(Number);if(!inside({x,y})){blocked.delete(tile);hazards.delete(tile);learned.delete(tile);}}
+  let adjusted=0;
+  for(const id of ids){const c=configs[id];if(c.start&&(!inside(c.start)||blocked.has(key(c.start)))){configs[id]={start:null,target:null};adjusted++;}
+    else if(c.target&&(!inside(c.target)||blocked.has(key(c.target)))){c.target=null;adjusted++;}}
+  buildGrid();
+  $('environment-status').textContent=`${GRID.cols} × ${GRID.rows} grid. East/west: ${GRID.tileWidthCm} cm per step; north/south: ${GRID.tileHeightCm} cm.${adjusted?' Endpoints outside the new free map were cleared.':''}`;
+  if(replan)refresh();
+}
+$('apply-grid').addEventListener('click',()=>{if(running||emergencyLatched)return;try{applyEnvironment(readEnvironmentInputs());}catch(e){$('environment-status').textContent=e.message;}});
+$('root-preset').addEventListener('click',()=>{if(running||emergencyLatched)return;applyEnvironment({cols:4,rows:4,tileWidthCm:16,tileHeightCm:16});});
+function displayFloor(asset){
+  floorAsset=asset;const el=$('floor-image');el.hidden=!asset;
+  if(asset)el.src=asset.dataURL;else el.removeAttribute('src');
+  $('floor-name').textContent=asset?`${asset.name} · ${asset.width} × ${asset.height} px`:'Blank drawing surface';
+  updateEnvironmentControls();
+}
+$('remove-image').addEventListener('click',()=>{displayFloor(null);$('environment-status').textContent='Background removed. Drawn walls and calibration are kept.';});
+// SVG is loaded in image context, never inserted as active document markup.
+// Strip active/external content, then rasterize. Only raster pixels survive in
+// the map file, so imported files cannot execute scripts or fetch remote assets.
+function cleanSVG(source){
+  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+  if(doc.querySelector('parsererror')||doc.documentElement.localName!=='svg')throw new Error('Invalid SVG file.');
+  const allowed=new Set(['svg','g','rect','circle','ellipse','line','polyline','polygon','path','text','tspan','defs','linearGradient','radialGradient','stop','clipPath','mask','use','symbol','title','desc']);
+  for(const el of [...doc.querySelectorAll('*')]){
+    if(!allowed.has(el.localName)){el.remove();continue;}
+    for(const attr of [...el.attributes]){
+      const name=attr.name.toLowerCase(),value=attr.value.trim();
+      if(name.startsWith('on')||name==='style'||name.endsWith('href')&&!value.startsWith('#')||/url\s*\(/i.test(value)&&!/^url\(\s*#[\w-]+\s*\)$/.test(value))el.removeAttribute(attr.name);
+    }
+  }
+  return new XMLSerializer().serializeToString(doc);
+}
+function loadImage(url){return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error('This image could not be decoded. Use PNG, JPG, or SVG.'));image.src=url;});}
+async function rasterImage(file){
+  if(file.size>10*1024*1024)throw new Error('Use an image smaller than 10 MB.');
+  const isSVG=/\.svg$/i.test(file.name)||file.type==='image/svg+xml';
+  if(!isSVG&&!/image\/(png|jpeg)/.test(file.type)&&!/\.(png|jpe?g)$/i.test(file.name))throw new Error('Choose a PNG, JPG, or SVG image.');
+  const blob=isSVG?new Blob([cleanSVG(await file.text())],{type:'image/svg+xml'}):file,url=URL.createObjectURL(blob);
+  try{
+    const image=await loadImage(url),w=image.naturalWidth,h=image.naturalHeight;
+    if(!w||!h||w*h>32e6)throw new Error('Image is too large or has no dimensions. Use fewer than 32 million pixels.');
+    const scale=Math.min(1,2048/Math.max(w,h)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(w*scale));canvas.height=Math.max(1,Math.round(h*scale));
+    canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+    return {name:file.name,width:canvas.width,height:canvas.height,dataURL:canvas.toDataURL('image/png')};
+  }finally{URL.revokeObjectURL(url);}
+}
+async function imageUpload(input,reference){
+  const file=input.files?.[0];if(!file||running||emergencyLatched)return;
+  environmentBusy=true;previewController?.abort();renderControls();$('environment-status').textContent='Reading image locally…';
+  try{const asset=await rasterImage(file);
+    if(reference)openCalibration(asset,'reference');else{displayFloor(asset);$('environment-status').textContent='Floor plan loaded locally. Calibrate a known distance, then trace walls with the Wall tool.';}
+  }catch(e){$('environment-status').textContent=e.message;}
+  finally{input.value='';environmentBusy=false;await refresh();}
+}
+$('floor-upload').addEventListener('change',()=>imageUpload($('floor-upload'),false));
+$('reference-upload').addEventListener('change',()=>imageUpload($('reference-upload'),true));
+function openCalibration(asset,kind){
+  if(!asset)return;calibrationAsset=asset;calibrationKind=kind;calibrationPoints=[];
+  $('calibration-image').src=asset.dataURL;$('calibration-marks').setAttribute('viewBox',`0 0 ${asset.width} ${asset.height}`);
+  $('reference-span').parentElement.hidden=kind!=='reference';
+  $('calibration-help').textContent=kind==='floor'?'Tap two points with a known distance on this top-down floor plan. Scale applies to the full image and the current grid. Perspective photos need rectification first.':'Mark the ends of a measured span in this reference image. Enter its length and how many tiles it represents; this sets square tile dimensions without replacing your floor plan.';
+  updateCalibration();$('calibration-dialog').showModal();
+}
+$('calibrate-image').addEventListener('click',()=>{try{readEnvironmentInputs();openCalibration(floorAsset,'floor');}catch(e){$('environment-status').textContent=e.message;}});
+$('calibration-pick').addEventListener('click',event=>{
+  const rect=$('calibration-image').getBoundingClientRect();
+  if(!rect.width||!rect.height)return;
+  if(calibrationPoints.length===2)calibrationPoints=[];
+  calibrationPoints.push({x:Math.max(0,Math.min(calibrationAsset.width,(event.clientX-rect.left)*calibrationAsset.width/rect.width)),y:Math.max(0,Math.min(calibrationAsset.height,(event.clientY-rect.top)*calibrationAsset.height/rect.height))});
+  updateCalibration();
+});
+function calibrationResult(){
+  if(calibrationPoints.length!==2)throw new Error('Choose two reference points.');
+  const env=readEnvironmentInputs(),cm=Number($('known-distance').value);
+  if(calibrationKind==='reference'){
+    if(Math.hypot(calibrationPoints[1].x-calibrationPoints[0].x,calibrationPoints[1].y-calibrationPoints[0].y)<2||!Number.isFinite(cm)||cm<=0)throw new Error('Choose distinct points and a positive measured distance.');
+    const span=Number($('reference-span').value);if(!Number.isFinite(span)||span<=0)throw new Error('Enter the number of tiles in the measured span.');
+    return validateEnvironment({...env,tileWidthCm:cm/span,tileHeightCm:cm/span});
+  }
+  return calibrateImage(calibrationAsset.width,calibrationAsset.height,...calibrationPoints,cm,env.cols,env.rows);
+}
+function updateCalibration(){
+  const svg=$('calibration-marks');svg.replaceChildren();
+  if(calibrationPoints.length===2){const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('class','cal-line');for(const [i,p] of calibrationPoints.entries()){line.setAttribute('x'+(i+1),p.x);line.setAttribute('y'+(i+1),p.y);}svg.append(line);}
+  for(const p of calibrationPoints){const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');circle.setAttribute('class','cal-point');circle.setAttribute('cx',p.x);circle.setAttribute('cy',p.y);circle.setAttribute('r',Math.max(3,calibrationAsset.width/100));svg.append(circle);}
+  $('apply-calibration').disabled=true;$('calibration-error').textContent='';
+  if(calibrationPoints.length<2){$('calibration-result').textContent=`${calibrationPoints.length}/2 points selected.`;return;}
+  try{const e=calibrationResult();$('calibration-result').textContent=`New tiles: ${e.tileWidthCm} × ${e.tileHeightCm} cm. Map: ${+(e.cols*e.tileWidthCm).toFixed(1)} × ${+(e.rows*e.tileHeightCm).toFixed(1)} cm. Rounded to 1 mm.`;$('apply-calibration').disabled=false;}
+  catch(e){$('calibration-error').textContent=e.message;}
+}
+for(const id of ['known-distance','reference-span'])$(id).addEventListener('input',updateCalibration);
+$('clear-calibration').addEventListener('click',()=>{calibrationPoints=[];updateCalibration();});
+$('close-calibration').addEventListener('click',()=>$('calibration-dialog').close());
+$('apply-calibration').addEventListener('click',()=>{if(running||emergencyLatched)return;try{applyEnvironment(calibrationResult());$('calibration-dialog').close();}catch(e){$('calibration-error').textContent=e.message;}});
+function downloadLocal(name,text,type){const url=URL.createObjectURL(new Blob([text],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+$('save-map').addEventListener('click',()=>{
+  // Hazards are prohibited: include them in obstacles for older map readers.
+  $('map-json').value=JSON.stringify({format:'root-fleet-map',version:1,grid:{...GRID},obstacles:[...blocked],hazards:[...hazards],image:floorAsset},null,2);
+  $('map-save-status').textContent='Download the file, or copy its JSON to save with a .json extension.';$('map-dialog').showModal();
+});
+$('close-map').addEventListener('click',()=>$('map-dialog').close());
+$('download-map').addEventListener('click',()=>downloadLocal('root-floor-plan.json',$('map-json').value,'application/json'));
+$('copy-map').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('map-json').value);$('map-save-status').textContent='Map JSON copied.';}catch(_){$('map-json').select();$('map-save-status').textContent='Select and copy the JSON from the box.';}});
+$('map-upload').addEventListener('change',async()=>{
+  const file=$('map-upload').files?.[0];if(!file||running||emergencyLatched)return;
+  environmentBusy=true;previewController?.abort();renderControls();
+  try{
+    if(file.size>24*1024*1024)throw new Error('Map file must be smaller than 24 MB.');
+    const map=JSON.parse(await file.text());if(map.format!=='root-fleet-map'||map.version!==1)throw new Error('Choose a Root Fleet map saved with this app.');
+    const env=validateEnvironment(map.grid||{});if(!Array.isArray(map.obstacles)||map.obstacles.length>env.cols*env.rows)throw new Error('Invalid obstacle list.');
+    for(const tile of map.obstacles){if(typeof tile!=='string'||!/^\d+,\d+$/.test(tile))throw new Error('Invalid obstacle tile.');const [x,y]=tile.split(',').map(Number);if(x>=env.cols||y>=env.rows)throw new Error('Obstacle outside the saved grid.');}
+    const hazardTiles=map.hazards??[];
+    if(!Array.isArray(hazardTiles)||hazardTiles.length>env.cols*env.rows||hazardTiles.some(tile=>!map.obstacles.includes(tile)))throw new Error('Invalid hazard tiles.');
+    let asset=null;
+    if(map.image){if(typeof map.image.dataURL!=='string'||!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(map.image.dataURL))throw new Error('Saved map background must be a PNG image.');
+      const image=await loadImage(map.image.dataURL);if(image.naturalWidth>2048||image.naturalHeight>2048)throw new Error('Saved background is too large.');
+      asset={name:String(map.image.name||'Saved floor plan').slice(0,200),dataURL:map.image.dataURL,width:image.naturalWidth,height:image.naturalHeight};}
+    // Validate the entire file before changing any live configuration.
+    blocked=new Set(map.obstacles);hazards=new Set(hazardTiles);learned.clear();displayFloor(asset);applyEnvironment(env,false);
+    $('environment-status').textContent='Saved map loaded. Check mission endpoints and place robots at their starts.';
+  }catch(e){$('environment-status').textContent='Map not loaded: '+e.message;}
+  finally{$('map-upload').value='';environmentBusy=false;await refresh();}
+});
+// Initialize after all helpers and local state exist (including the worker UI).
+syncEnvironmentInputs();buildGrid();addRobot(false);configs.A={start:{x:0,y:0,heading:0},target:{x:0,y:3}};setMode('A');refresh();
+if(emergencyLatched){$('status-banner').classList.add('emergency');say('Touch stop remains latched. Restore starts and reset manually.',true);}else say('Robot A is ready. Customize the map, simulate, or add another virtual robot below.');
+
+const DEV_DRAFT_KEY='root-fleet-developer-draft-v1',DEV_WORKING_KEY='root-fleet-developer-working-v1';
+let developerReady=false,developerTab='html',developerDraft={html:'',css:'',js:''},developerOriginal='',developerPreviewHash='',developerPreviewReady=false,developerPreviewError=false,developerChannel='',developerLintTimer=null;
+function developerSnapshot(){return JSON.stringify(developerDraft);}
+function readDeveloperDraft(key){
+  try{const item=JSON.parse(localStorage.getItem(key));if(item&&item.schemaVersion===1&&['html','css','js'].every(field=>typeof item[field]==='string'&&item[field].length<=2e6))return {html:item.html,css:item.css,js:item.js};}catch(_){}return null;
+}
+function updateDeveloperControls(){
+  if(!developerReady)return;const connected=ids.filter(id=>ble[id]?.connected).length;
+  const editable=!running&&!connecting&&!emergencyLatched;
+  for(const button of document.querySelectorAll('#developer-dialog button:not(#close-developer),#developer-dialog input'))button.disabled=!editable;
+  $('developer-source').disabled=!editable;
+  $('dev-restore-working').disabled=!editable||!readDeveloperDraft(DEV_WORKING_KEY);
+  const freshPreview=developerPreviewReady&&!developerPreviewError&&developerPreviewHash===developerSnapshot();
+  $('dev-mark-working').disabled=!editable||!freshPreview;
+  $('dev-apply').disabled=!canApplyCustomization({running,connecting,emergency:emergencyLatched,connected})||!freshPreview;
+  $('dev-apply-status').textContent=connected?'Disconnect every physical robot before opening a modified app.':running||emergencyLatched?'Stop the fleet and clear any touch latch before applying changes.':!freshPreview?'Run a fresh, error-free preview before opening a modified copy.':'The modified app opens separately. This supported tab remains available for recovery.';
+}
+function loadEditorTab(){
+  $('developer-source').value=developerDraft[developerTab];
+  for(const button of document.querySelectorAll('#developer-tabs button'))button.setAttribute('aria-pressed',button.dataset.editor===developerTab);
+  $('dev-source-info').textContent=`${developerDraft[developerTab].split('\n').length} lines · ${developerDraft[developerTab].length.toLocaleString()} characters`;
+}
+function validateDeveloperSource(){
+  const errors=[],notes=[];
+  if(Object.values(developerDraft).some(source=>source.length>2e6))errors.push('Keep each source panel below 2 MB.');
+  const doc=new DOMParser().parseFromString(developerDraft.html,'text/html');
+  let index=0;for(const script of doc.querySelectorAll('script')){
+    index++;if(script.src){notes.push(`Script ${index}: external scripts cannot load in isolated preview.`);continue;}
+    if(script.type==='module'){notes.push(`Script ${index}: module syntax is checked when preview runs.`);continue;}
+    if(script.type&&!['text/javascript','application/javascript'].includes(script.type))continue;
+    try{new Function(script.textContent);}catch(error){errors.push(`Inline script ${index}: ${error.message}`);}
+  }
+  try{new Function(developerDraft.js);}catch(error){errors.push(`JS extension: ${error.message}`);}
+  try{const sheet=new CSSStyleSheet();sheet.replaceSync(developerDraft.css);}catch(error){errors.push(`CSS override: ${error.message}`);}
+  if(!errors.length)notes.unshift('Classic JavaScript syntax checked. HTML/CSS use browser parsing; unsupported markup or CSS may be ignored.');
+  $('dev-feedback').textContent=[...errors,...notes].join('\n');$('dev-feedback').classList.toggle('error',!!errors.length);
+  return {valid:!errors.length,doc};
+}
+function composeDeveloperDocument(previewMode,channel=''){
+  const validation=validateDeveloperSource();if(!validation.valid)throw new Error('Fix the syntax errors before continuing.');const doc=validation.doc;
+  for(const previous of doc.querySelectorAll('[data-root-bootstrap],[data-root-extension],[data-root-override],[data-root-preview-policy]'))previous.remove();
+  const bootstrap=doc.createElement('script');bootstrap.dataset.rootBootstrap='true';
+  bootstrap.textContent=`window.__ROOT_PREVIEW__=${previewMode};window.__ROOT_CUSTOM_BUILD__=${!previewMode};`;
+  if(previewMode){
+    bootstrap.textContent+=`(()=>{const channel=${JSON.stringify(channel)},report=(kind,detail)=>parent.postMessage({channel,kind,detail},'*');window.addEventListener('error',e=>report('error',String(e.message).slice(0,500)));window.addEventListener('unhandledrejection',e=>report('error',String(e.reason).slice(0,500)));window.addEventListener('DOMContentLoaded',()=>{let parentAccessible=false,storageAccessible=false;try{void parent.document.body;parentAccessible=true;}catch(_){}try{void localStorage.length;storageAccessible=true;}catch(_){}const policy=document.permissionsPolicy||document.featurePolicy;report('ready',{parentAccessible,storageAccessible,bluetoothAllowed:policy?policy.allowsFeature('bluetooth'):null});});})();`;
+  }
+  doc.head.prepend(bootstrap);
+  if(previewMode){const policy=doc.createElement('meta');policy.dataset.rootPreviewPolicy='true';policy.httpEquiv='Content-Security-Policy';policy.content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' blob:; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; worker-src blob:; connect-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'";doc.head.prepend(policy);}
+  const style=doc.createElement('style');style.dataset.rootOverride='true';style.textContent=developerDraft.css;doc.head.append(style);
+  const extension=doc.createElement('script');extension.dataset.rootExtension='true';extension.textContent=developerDraft.js;doc.body.append(extension);
+  if(!previewMode){const badge=doc.createElement('div');badge.textContent='CUSTOMER-MODIFIED BUILD · Use the supported app tab to recover.';badge.style.cssText='position:relative;padding:10px 16px;background:#fff3db;color:#72501c;font:12px system-ui;z-index:2147483647';doc.body.prepend(badge);}
+  return '<!doctype html>\n'+doc.documentElement.outerHTML;
+}
+$('open-developer').addEventListener('click',async()=>{
+  if(running||connecting||emergencyLatched)return;
+  try{
+    if(!developerOriginal){const response=await fetch(location.href.split('#')[0],{cache:'no-store'});if(!response.ok)throw new Error('Source could not be loaded. Serve the app over HTTPS or localhost.');developerOriginal=await response.text();}
+    // Fetching source is asynchronous: a mission or connection may have started
+    // meanwhile. Never open a modal over active safety controls.
+    if(running||connecting||emergencyLatched)return;
+    if(!developerReady){developerDraft=readDeveloperDraft(DEV_DRAFT_KEY)||{html:developerOriginal,css:'',js:''};developerReady=true;}
+    loadEditorTab();updateDeveloperControls();$('developer-dialog').showModal();$('dev-status').textContent='Loaded locally. No imported or saved code has executed.';validateDeveloperSource();
+  }catch(error){say(error.message,true);}
+});
+$('close-developer').addEventListener('click',()=>$('developer-dialog').close());
+$('developer-dialog').addEventListener('close',()=>{ $('developer-preview').removeAttribute('srcdoc');developerPreviewReady=false;updateDeveloperControls();});
+for(const button of document.querySelectorAll('#developer-tabs button'))button.addEventListener('click',()=>{developerTab=button.dataset.editor;loadEditorTab();});
+$('developer-source').addEventListener('input',()=>{developerDraft[developerTab]=$('developer-source').value;clearTimeout(developerLintTimer);developerLintTimer=setTimeout(validateDeveloperSource,350);$('dev-source-info').textContent=`${developerDraft[developerTab].split('\n').length} lines · unsaved changes`;updateDeveloperControls();});
+$('developer-source').addEventListener('keydown',event=>{if(event.key!=='Tab')return;event.preventDefault();const input=event.target;input.setRangeText('  ',input.selectionStart,input.selectionEnd,'end');input.dispatchEvent(new Event('input'));});
+$('dev-check').addEventListener('click',()=>validateDeveloperSource());
+$('dev-save').addEventListener('click',()=>{
+  try{if(Object.values(developerDraft).some(source=>source.length>2e6))throw new Error('Source is too large.');localStorage.setItem(DEV_DRAFT_KEY,JSON.stringify({schemaVersion:1,...developerDraft}));$('dev-status').textContent='Draft saved locally. Saving does not execute code.';}catch(error){$('dev-status').textContent='Could not save draft: '+error.message;}
+});
+$('dev-import').addEventListener('change',async()=>{
+  const file=$('dev-import').files?.[0];if(!file)return;
+  try{if(file.size>2e6)throw new Error('Use an HTML file smaller than 2 MB.');developerDraft={html:await file.text(),css:'',js:''};developerTab='html';loadEditorTab();validateDeveloperSource();developerPreviewReady=false;updateDeveloperControls();$('dev-status').textContent='Imported as text only. Choose Run preview explicitly to execute it.';}
+  catch(error){$('dev-status').textContent=error.message;}finally{$('dev-import').value='';}
+});
+$('dev-preview').addEventListener('click',()=>{
+  if(running||connecting||emergencyLatched)return;
+  try{developerChannel=crypto.randomUUID();const source=composeDeveloperDocument(true,developerChannel);developerPreviewHash=developerSnapshot();developerPreviewReady=false;developerPreviewError=false;$('dev-preview-status').textContent='Starting isolated preview…';$('developer-preview').srcdoc=source;updateDeveloperControls();}
+  catch(error){$('dev-status').textContent=error.message;}
+});
+window.addEventListener('message',event=>{
+  if(event.source!==$('developer-preview').contentWindow||event.origin!=='null'||!event.data||event.data.channel!==developerChannel)return;
+  if(event.data.kind==='error'){developerPreviewError=true;$('dev-preview-status').textContent='Preview error: '+String(event.data.detail).slice(0,500);}
+  if(event.data.kind==='ready'){
+    developerPreviewReady=true;const checks=event.data.detail;
+    if(checks?.parentAccessible||checks?.storageAccessible||checks?.bluetoothAllowed===true){developerPreviewError=true;$('dev-preview-status').textContent='Isolation check failed. Preview cannot be applied.';}
+    else if(!developerPreviewError)$('dev-preview-status').textContent='Preview loaded · parent DOM and storage isolated · Bluetooth denied. Inspect behavior before marking it working.';
+  }
+  updateDeveloperControls();
+});
+$('dev-mark-working').addEventListener('click',()=>{
+  if(!developerPreviewReady||developerPreviewError||developerPreviewHash!==developerSnapshot())return;
+  try{localStorage.setItem(DEV_WORKING_KEY,JSON.stringify({schemaVersion:1,...developerDraft}));$('dev-status').textContent='Your verified working snapshot is saved locally.';}catch(error){$('dev-status').textContent='Could not save working snapshot: '+error.message;}updateDeveloperControls();
+});
+function restoreDeveloperSource(original){
+  const draft=original?{html:developerOriginal,css:'',js:''}:readDeveloperDraft(DEV_WORKING_KEY);if(!draft)return;
+  developerDraft=draft;developerPreviewReady=false;$('developer-preview').removeAttribute('srcdoc');loadEditorTab();validateDeveloperSource();updateDeveloperControls();$('dev-status').textContent=original?'Original source restored in the editor. Nothing executed.':'Working snapshot restored in the editor. Nothing executed.';
+}
+$('dev-restore-original').addEventListener('click',()=>restoreDeveloperSource(true));$('dev-restore-working').addEventListener('click',()=>restoreDeveloperSource(false));
+$('dev-export').addEventListener('click',()=>{try{downloadLocal('root-fleet-custom.html',composeDeveloperDocument(false),'text/html');$('dev-status').textContent='Export requested. The modified app has been downloaded.';}catch(error){$('dev-status').textContent=error.message;}});
+$('dev-apply').addEventListener('click',async()=>{
+  if(!canApplyCustomization({running,connecting,emergency:emergencyLatched,connected:ids.filter(id=>ble[id]?.connected).length})||!developerPreviewReady||developerPreviewError||developerPreviewHash!==developerSnapshot()){$('dev-status').textContent='Stop, disconnect every robot, and run a fresh preview before applying.';return;}
+  try{const source=composeDeveloperDocument(false),url=URL.createObjectURL(new Blob([source],{type:'text/html'})),link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener noreferrer';link.click();setTimeout(()=>URL.revokeObjectURL(url),600000);$('dev-status').textContent='Requested a separate modified app tab. If blocked, use Export source. This supported app remains available for recovery.';}
+  catch(error){$('dev-status').textContent=error.message;}
+});
+appUiReady=true;renderControls();
+if(window.__ROOT_CUSTOM_BUILD__===true){$('custom-build-note').hidden=false;$('custom-build-note').textContent='CUSTOMER-MODIFIED BUILD · Return to the original app tab for recovery. Safety behavior may have changed.';}
+</script>
+</body></html>
