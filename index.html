@@ -1490,6 +1490,7 @@ function readDeveloperDraft(key){
   try{const item=JSON.parse(localStorage.getItem(key));if(item&&item.schemaVersion===1&&['html','css','js'].every(field=>typeof item[field]==='string'&&item[field].length<=2e6))return {html:item.html,css:item.css,js:item.js};}catch(_){}return null;
 }
 function updateDeveloperControls(){
+  $('open-developer').disabled=running||connecting||emergencyLatched;
   if(!developerReady)return;const connected=ids.filter(id=>ble[id]?.connected).length;
   const editable=!running&&!connecting&&!emergencyLatched;
   for(const button of document.querySelectorAll('#developer-dialog button:not(#close-developer),#developer-dialog input'))button.disabled=!editable;
